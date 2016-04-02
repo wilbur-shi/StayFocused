@@ -1,6 +1,8 @@
 package com.mdb.wyn.stayfocused;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.support.v4.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
@@ -15,18 +17,11 @@ public class TimerPickerFragment extends DialogFragment
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new TimePickerDialog(getActivity(), this, 0, 25, true);
-//        int hour = c.get(Calendar.HOUR_OF_DAY);
-//        int minute = c.get(Calendar.MINUTE);
-//
-//        // Create a new instance of TimePickerDialog and return it
-//        return new TimePickerDialog(getActivity(), this, hour, minute,
-//                DateFormat.is24HourFormat(getActivity()));
+        return new TimePickerDialog(getActivity(), this, 0, 0, true);
     }
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         // Do something with the time chosen by the user
-
-
+        ((TimerActivity)getActivity()).setTimeSet(hourOfDay, minute);
     }
 }
