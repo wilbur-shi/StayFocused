@@ -10,23 +10,78 @@
     tools:showIn="@layout/activity_timer" tools:context=".TimerActivity">
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/minute"
+        android:layout_marginLeft="10dp"
+        android:textSize="20sp"
+        android:textColor="#000000"
+        android:layout_centerHorizontal="true"
+        android:text="@string/minuteDisplay"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/hour"
+        android:textSize="20sp"
+        android:textColor="#000000"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@id/minute"
+        android:text="@string/hourDisplay"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/second"
+        android:textColor="#000000"
+        android:layout_toRightOf="@id/minute"
+        android:layout_marginLeft="15dp"
+        android:textSize="20sp"
+        android:text="@string/secondDisplay"/>
+
+    <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:gravity="center"
         android:textSize="50sp"
         android:textStyle="bold"
         android:id="@+id/timeSetTextView"
-        android:background="@color/colorAccent"/>
-
-    <Button
+        android:textColor="#000000"
+        android:layout_below="@id/minute"
+        android:layout_marginTop="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <ProgressBar
+        android:layout_width="250dp"
+        android:layout_height="273dp"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:id="@+id/countdownTimerCircle"
+        android:layout_centerInParent="true"
+        android:max="48"
+        android:progress="45"
+        android:progressDrawable="@drawable/countdown_animation"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/giveUpTextView"
+        android:text="@string/giveUpButton"
+        android:textSize="35sp"
+        android:textColor="#F00"
+        android:layout_alignBottom="@+id/countdownTimerCircle"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true" />
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/startButton"
         android:layout_centerHorizontal="true"
         android:gravity="center"
+        android:textColor="#000000"
         android:layout_alignParentBottom="true"
-        android:textSize="35sp"
+        android:layout_marginBottom="35dp"
+        android:textSize="25sp"
         android:id="@+id/startButton"/>
 
 </RelativeLayout>

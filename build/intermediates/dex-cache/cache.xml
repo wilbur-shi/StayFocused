@@ -23,18 +23,18 @@
         <dex dex="C:\Users\Wilbur\AndroidStudioProjects\StayFocused\app\build\intermediates\pre-dexed\debug\classes-520b46ba9535e51ac77117f5f0e334f05a1a2f97.jar" />
     </item>
     <item
-        jar="C:\Users\Wilbur\AndroidStudioProjects\StayFocused\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.2.0\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.2"
-        sha1="8c108c22c99e794eff255bb34d2a461200c4cbb0">
-        <dex dex="C:\Users\Wilbur\AndroidStudioProjects\StayFocused\app\build\intermediates\pre-dexed\debug\classes-3fb29a3cccd2618bfd45a05c3e3c45c76e8cadee.jar" />
-    </item>
-    <item
         jar="C:\Users\Wilbur\AndroidStudioProjects\StayFocused\app\build\intermediates\exploded-aar\com.android.support\design\23.2.0\jars\classes.jar"
         jumboMode="false"
         revision="23.0.2"
         sha1="1aa5b025efe97f5006f5be16d6ca67c6c3c0c0d8">
         <dex dex="C:\Users\Wilbur\AndroidStudioProjects\StayFocused\app\build\intermediates\pre-dexed\debug\classes-e9bb383a06a771c7a38d3755e9959459b567c9fe.jar" />
+    </item>
+    <item
+        jar="C:\Users\Wilbur\AndroidStudioProjects\StayFocused\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="8c108c22c99e794eff255bb34d2a461200c4cbb0">
+        <dex dex="C:\Users\Wilbur\AndroidStudioProjects\StayFocused\app\build\intermediates\pre-dexed\debug\classes-3fb29a3cccd2618bfd45a05c3e3c45c76e8cadee.jar" />
     </item>
     <item
         jar="C:\Users\Wilbur\AndroidStudioProjects\StayFocused\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.0\jars\classes.jar"

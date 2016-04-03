@@ -21,6 +21,14 @@ public class Time {
         return (int) (ms / 60000);
     }
 
+    public boolean isZero() {
+        return hour == 0 && minute == 0 && second == 0;
+    }
+    public void reset() {
+        hour = 0;
+        minute = 0;
+        second = 0;
+    }
     public void setHour(int h) {
         hour = h;
         if (hour < 0) {
