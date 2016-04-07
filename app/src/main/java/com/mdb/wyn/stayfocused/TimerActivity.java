@@ -39,7 +39,8 @@ public class TimerActivity extends AppCompatActivity {
    // private int numNotified = 0;
   //  private TimePicker timePicker;
     private ProgressBar pb;
-    static ArrayList<String> Blacklist;
+    static ArrayList<String> nonSystemBlackList;
+    static ArrayList<String> systemBlackList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,25 +109,49 @@ public class TimerActivity extends AppCompatActivity {
 
     }
 
-    public void test() {
-        Blacklist= new ArrayList<>();
-        System.out.println("into test method");
+    @Override
+    protected void onDestroy() {
+//        check if the timer is already running here
+        super.onDestroy();
+        new AlertDialog.Builder(TimerActivity.this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Are you sure?")
+                .setMessage("Closing the app will reset the timer.")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        System.exit(0);
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+        //else if the timer is not running yet, do not reset the timer
+
+    }
+
+
+    public void blackListCreator() {
+        nonSystemBlackList = new ArrayList<>();
+        systemBlackList= new ArrayList<>();
         PackageManager pm = getApplicationContext().getPackageManager();
         List<PackageInfo> list = pm.getInstalledPackages(0);
         try {
             for (PackageInfo pi : list) {
                 ApplicationInfo ai = pm.getApplicationInfo(pi.packageName, 0);
-
+                String currAppName = pm.getApplicationLabel(ai).toString();
                 if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
-                    String currAppName = pm.getApplicationLabel(ai).toString();
-                    Blacklist.add(currAppName);
+                    nonSystemBlackList.add(currAppName);
 //                    System.out.println("into for loop");
+                }
+                else {
+                    systemBlackList.add(currAppName);
+                    System.out.println("YOUNG JUST ADDED"+currAppName);
                 }
             }
         } catch (PackageManager.NameNotFoundException e) {
             System.out.println("Error: " + e);
         }
-        System.out.println("before intent");
         Intent blacklistIntent = new Intent(getApplicationContext(), BlackListActivity.class);
         startActivity(blacklistIntent);
         //System.out.println("after intent");
@@ -191,7 +216,7 @@ public class TimerActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            test();
+            blackListCreator();
         }
 
         return super.onOptionsItemSelected(item);

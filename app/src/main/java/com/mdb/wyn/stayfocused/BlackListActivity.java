@@ -1,7 +1,6 @@
 package com.mdb.wyn.stayfocused;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,8 +23,8 @@ public class BlackListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         ArrayList<BlackListItem> blackListItems = new ArrayList<>();
 
-        System.out.println(TimerActivity.Blacklist.size());
-        for (String appName : TimerActivity.Blacklist) {
+        System.out.println(TimerActivity.nonSystemBlackList.size());
+        for (String appName : TimerActivity.nonSystemBlackList) {
             blackListItems.add(new BlackListItem(appName,false));
             Log.i("ArrayList", appName);
             System.out.println("into for for blacklist method");
