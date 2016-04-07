@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,12 +20,11 @@ import java.util.ArrayList;
      */
     public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.CustomViewHolder>{
         private Context context;
-        private ArrayList<BlackListItem> blackListArray;
+        public static ArrayList<BlackListItem> blackListArray;
 
         public BlackListAdapter(Context context, ArrayList<BlackListItem> blackListItems) {
             this.context = context;
             blackListArray = blackListItems;
-            System.out.println("created a blacklist adapter");
         }
 
         @Override
@@ -37,16 +37,20 @@ import java.util.ArrayList;
         @Override
         public void onBindViewHolder(CustomViewHolder holder, int position) {
             BlackListItem blackListItem = blackListArray.get(position);
-          //  Log.i("ArrayList Testing", "Size is " + blackListArray.size());
             holder.appNameTextView.setText(blackListItem.appName);
             holder.isBlacklistCheckBox.setChecked(false);
-         //   System.out.println("into bind view holder method");
+            holder.isBlacklistCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    //result of changing the checkbox
+                    //dunno if need to notify datasetchanged
+                }
+            });
 
         }
 
         @Override
         public int getItemCount() {
-            Log.i("ArrayList", blackListArray.size() + "");
             return blackListArray.size();
         }
 
