@@ -1,7 +1,9 @@
 package com.mdb.wyn.stayfocused;
 
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.CountDownTimer;
@@ -163,6 +165,33 @@ public class TimerActivity extends AppCompatActivity {
             @Override
             public void onTick(long millisUntilFinished) {
                 int minLeft = Time.msToMinutes(millisUntilFinished);
+                final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+                List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+
+                PackageManager pm2= getApplicationContext().getPackageManager();
+                for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+                    try {
+
+                        CharSequence appName = pm2.getApplicationLabel(pm2.getApplicationInfo(appProcess.processName, PackageManager.GET_META_DATA));
+                        if (! BlockingActivity.isBlockingOpen && appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && nonSystemBlackList.contains(appName)) {
+                           System.out.println(appName);
+                            Intent blockingIntent= new Intent(getApplicationContext(),BlockingActivity.class);
+                            startActivity(blockingIntent);
+
+                        }
+                    }
+
+                    catch (PackageManager.NameNotFoundException e){
+                        System.out.println("Error: " + e);
+
+                    }
+                    catch (NullPointerException nullPointerException){
+                        System.out.println("HEYOOOOOO" + nullPointerException.getMessage());
+                    }
+
+                }
+
+
                 if (minLeft <= 5) {
                     //Toast.makeText(getApplicationContext(), String.format("%d min left", minLeft), Toast.LENGTH_SHORT).show();
                 }
