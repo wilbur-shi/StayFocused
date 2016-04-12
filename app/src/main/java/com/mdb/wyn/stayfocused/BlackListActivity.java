@@ -27,7 +27,7 @@ public class BlackListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         ArrayList<BlackListItem> blackListItems = new ArrayList<>();
 
-        for (String appName : TimerActivity.nonSystemBlackList) {
+        for (String appName : SettingsActivity.nonSystemBlackList) {
             blackListItems.add(new BlackListItem(appName, false));
         }
 

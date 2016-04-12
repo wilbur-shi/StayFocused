@@ -41,8 +41,7 @@ public class TimerActivity extends AppCompatActivity {
    // private int numNotified = 0;
   //  private TimePicker timePicker;
     private ProgressBar pb;
-    static ArrayList<String> nonSystemBlackList;
-    static ArrayList<String> systemBlackList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,12 +101,6 @@ public class TimerActivity extends AppCompatActivity {
                 createDialogAndSetTime();
             }
         });
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//            }
-//        });
 
     }
 
@@ -132,34 +125,6 @@ public class TimerActivity extends AppCompatActivity {
 
     }
 
-
-    public void blackListCreator() {
-        nonSystemBlackList = new ArrayList<>();
-        systemBlackList= new ArrayList<>();
-        PackageManager pm = getApplicationContext().getPackageManager();
-        List<PackageInfo> list = pm.getInstalledPackages(0);
-        try {
-            for (PackageInfo pi : list) {
-                ApplicationInfo ai = pm.getApplicationInfo(pi.packageName, 0);
-                String currAppName = pm.getApplicationLabel(ai).toString();
-                if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
-                    nonSystemBlackList.add(currAppName);
-//                    System.out.println("into for loop");
-                }
-                else {
-                    systemBlackList.add(currAppName);
-                    System.out.println("YOUNG JUST ADDED"+currAppName);
-                }
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            System.out.println("Error: " + e);
-        }
-        Intent blacklistIntent = new Intent(getApplicationContext(), BlackListActivity.class);
-        startActivity(blacklistIntent);
-        //System.out.println("after intent");
-    }
-
-
     private void createTimer(long ms) {
         timer = new CountDownTimer(ms, 1000) {
             @Override
@@ -173,7 +138,7 @@ public class TimerActivity extends AppCompatActivity {
                     try {
 
                         CharSequence appName = pm2.getApplicationLabel(pm2.getApplicationInfo(appProcess.processName, PackageManager.GET_META_DATA));
-                        if (! BlockingActivity.isBlockingOpen && appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && nonSystemBlackList.contains(appName)) {
+                        if (! BlockingActivity.isBlockingOpen && appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && SettingsActivity.nonSystemBlackList.contains(appName)) {
                            System.out.println(appName);
                             Intent blockingIntent= new Intent(getApplicationContext(),BlockingActivity.class);
                             startActivity(blockingIntent);
@@ -191,13 +156,13 @@ public class TimerActivity extends AppCompatActivity {
 
                 }
 
-
+                //maybe we should change this to when theres no time left, congratulate them instead of notifying when time left <=5
                 if (minLeft <= 5) {
                     //Toast.makeText(getApplicationContext(), String.format("%d min left", minLeft), Toast.LENGTH_SHORT).show();
                 }
                 timeSet.addSecond(-1);
                 updateTimeTextView();
-                pb.setProgress((int)minLeft);
+                pb.setProgress(minLeft);
             }
             @Override
             public void onFinish() {
@@ -245,7 +210,9 @@ public class TimerActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            blackListCreator();
+            Intent openSettings= new Intent(getApplicationContext(),SettingsActivity.class);
+            startActivity(openSettings);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
