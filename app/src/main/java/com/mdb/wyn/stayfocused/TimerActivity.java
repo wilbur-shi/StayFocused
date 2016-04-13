@@ -41,6 +41,8 @@ public class TimerActivity extends AppCompatActivity {
    // private int numNotified = 0;
   //  private TimePicker timePicker;
     private ProgressBar pb;
+    static boolean isBlockingOpen= false;
+
 
 
     @Override
@@ -138,8 +140,9 @@ public class TimerActivity extends AppCompatActivity {
                     try {
 
                         CharSequence appName = pm2.getApplicationLabel(pm2.getApplicationInfo(appProcess.processName, PackageManager.GET_META_DATA));
-                        if (! BlockingActivity.isBlockingOpen && appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && SettingsActivity.nonSystemBlackList.contains(appName)) {
+                        if (!isBlockingOpen && appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && SettingsActivity.nonSystemBlackList.contains(appName)) {
                            System.out.println(appName);
+
                             Intent blockingIntent= new Intent(getApplicationContext(),BlockingActivity.class);
                             startActivity(blockingIntent);
 

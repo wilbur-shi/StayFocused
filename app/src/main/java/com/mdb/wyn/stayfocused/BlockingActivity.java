@@ -11,14 +11,14 @@ import android.widget.TextView;
  * Created by Young on 4/9/2016.
  */
 public class BlockingActivity extends AppCompatActivity{
-    static boolean isBlockingOpen= false;
     TextView backToWork;
     TextView giveUp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.blocking_activity);
-        isBlockingOpen= true;
+        TimerActivity.isBlockingOpen= true;
 
         backToWork= (TextView) findViewById(R.id.backToWork);
         giveUp= (TextView) findViewById(R.id.giveUp);
@@ -51,6 +51,6 @@ public class BlockingActivity extends AppCompatActivity{
     @Override
     protected void onStop() {
         super.onStop();
-        isBlockingOpen= false;
+        TimerActivity.isBlockingOpen= false;
     }
 }

@@ -22,7 +22,8 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new PreferenceScreenFragment()).commit();
+
+//        getFragmentManager().beginTransaction().replace(android.R.id.content, new PreferenceScreenFragment()).commit();
         System.out.println("GOT TO BUTTON");
         blackListButton= (ImageButton) findViewById(R.id.blackListButton);
 
@@ -35,16 +36,16 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
-    public static class PreferenceScreenFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.preferences);
-
-
-
-        }
-    }
+//    public static class PreferenceScreenFragment extends PreferenceFragment {
+//        @Override
+//        public void onCreate(Bundle savedInstanceState) {
+//            super.onCreate(savedInstanceState);
+//            addPreferencesFromResource(R.xml.preferences);
+//
+//
+//
+//        }
+//    }
 
 
     public void blackListCreator() {
@@ -57,10 +58,10 @@ public class SettingsActivity extends AppCompatActivity {
             for (PackageInfo pi : list) {
                 ApplicationInfo ai = pm.getApplicationInfo(pi.packageName, 0);
                 String currAppName = pm.getApplicationLabel(ai).toString();
-                if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 0 && currAppName!="StayFocused") {
+                if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 0 && ! currAppName.equals("StayFocused")) {
                     nonSystemBlackList.add(currAppName);
                 }
-                else if (currAppName!="StayFocused"){
+                else if (! currAppName.equals("StayFocused")){
                     systemBlackList.add(currAppName);
                     System.out.println("YOUNG JUST ADDED"+currAppName);
                 }
