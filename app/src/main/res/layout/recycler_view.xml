@@ -10,18 +10,29 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".BlackListActivity">
     <CheckBox
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:checked="false"
         android:text="Select All"
         android:onClick="onCheckBoxClicked"
         android:id="@+id/selectAll"
-        />
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/systemApps"
+        android:layout_toEndOf="@+id/systemApps" />
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/recyclerView"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show System Apps"
+        android:id="@+id/systemApps"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent"
         />
 </RelativeLayout>

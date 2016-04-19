@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 
 
@@ -17,15 +18,18 @@ import java.util.ArrayList;
  */
 public class BlackListActivity extends AppCompatActivity {
     BlackListAdapter blackListAdapter;
+    CheckBox selectAll;
+    ArrayList<BlackListItem> blackListItems;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_view);
+        selectAll= (CheckBox) findViewById(R.id.selectAll);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        ArrayList<BlackListItem> blackListItems = new ArrayList<>();
+        blackListItems = new ArrayList<>();
 
         for (String appName : SettingsActivity.nonSystemBlackList) {
             blackListItems.add(new BlackListItem(appName, false));
@@ -33,6 +37,22 @@ public class BlackListActivity extends AppCompatActivity {
 
         blackListAdapter = new BlackListAdapter(getApplicationContext(), blackListItems);
         recyclerView.setAdapter(blackListAdapter);
+
+        final Button showSystemApps= (Button) findViewById(R.id.systemApps);
+        showSystemApps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (showSystemApps.getText()=="Show System Apps"){
+                    showSystemApps.setText("Hide System Apps");
+                }
+                else {
+                    showSystemApps.setText("Show System Apps");
+                }
+                for (String appName : SettingsActivity.systemBlackList) {
+                    blackListItems.add(new BlackListItem(appName, false));
+                }
+            }
+        });
     }
 
     public void onCheckBoxClicked(View view) {
@@ -40,7 +60,7 @@ public class BlackListActivity extends AppCompatActivity {
         boolean checked = ((CheckBox) view).isChecked();
         for (BlackListItem eachItem: BlackListAdapter.blackListArray){
             eachItem.isBlacklisted= checked;
-//            blackListAdapter.notifyDataSetChanged();
+            blackListAdapter.notifyDataSetChanged();
         }
 
     }

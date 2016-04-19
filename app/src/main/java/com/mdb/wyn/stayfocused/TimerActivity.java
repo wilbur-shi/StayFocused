@@ -3,6 +3,7 @@ package com.mdb.wyn.stayfocused;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -107,9 +108,10 @@ public class TimerActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onStop() {
 //        check if the timer is already running here
-        super.onDestroy();
+        super.onStop();
+        if (!timeSet.isZero()){
         new AlertDialog.Builder(TimerActivity.this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle("Are you sure?")
@@ -123,6 +125,12 @@ public class TimerActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("No", null)
                 .show();
+
+        }
+        else{
+            finish();
+            System.exit(0);
+        }
         //else if the timer is not running yet, do not reset the timer
 
     }
@@ -144,7 +152,13 @@ public class TimerActivity extends AppCompatActivity {
                            System.out.println(appName);
 
                             Intent blockingIntent= new Intent(getApplicationContext(),BlockingActivity.class);
-                            startActivity(blockingIntent);
+                            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 1, blockingIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                            try {
+                                // Perform the operation associated with our pendingIntent
+                                pendingIntent.send();
+                            } catch (PendingIntent.CanceledException e) {
+                                e.printStackTrace();
+                            }
 
                         }
                     }
