@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private MyPagerAdapter adapter;
     private TabLayout tabLayout;
+    public static boolean isBlockingOpen = false;
 
 
     @Override
