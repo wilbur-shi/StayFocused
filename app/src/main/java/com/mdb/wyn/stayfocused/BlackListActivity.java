@@ -24,12 +24,12 @@ public class BlackListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         ArrayList<BlackListItem> blackListItems = new ArrayList<>();
 
-        System.out.println(TimerActivity.Blacklist.size());
-        for (String appName : TimerActivity.Blacklist) {
-            blackListItems.add(new BlackListItem(appName,false));
-            Log.i("ArrayList", appName);
-            System.out.println("into for for blacklist method");
-        }
+//        System.out.println(TimerActivity.Blacklist.size());
+//        for (String appName : TimerActivity.Blacklist) {
+//            blackListItems.add(new BlackListItem(appName,false));
+//            Log.i("ArrayList", appName);
+//            System.out.println("into for for blacklist method");
+//        }
 
         BlackListAdapter blackListAdapter = new BlackListAdapter(getApplicationContext(), blackListItems);
         recyclerView.setAdapter(blackListAdapter);
