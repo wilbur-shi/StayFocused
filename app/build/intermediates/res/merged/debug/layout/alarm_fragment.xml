@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="50sp"
+        android:id="@+id/timeSetTextView"
+        android:textColor="#000000"
+        android:layout_marginTop="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/startTimeText"
+        android:layout_below="@id/timeSetTextView"
+        android:text="Start time"
+        android:textColor="@color/colorAccent"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/startingTimeText"
+        android:layout_below="@id/startTimeText"
+        android:textColor="@color/colorPrimaryDark"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/endTimeText"
+        android:text="End time"
+        android:layout_below="@id/startingTimeText"
+        android:textColor="@color/colorAccent"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/endingTimeText"
+        android:layout_below="@id/endTimeText"
+        android:textColor="@color/colorPrimaryDark"/>
+
+
+</RelativeLayout>

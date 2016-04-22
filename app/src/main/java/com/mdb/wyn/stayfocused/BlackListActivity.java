@@ -31,13 +31,15 @@ public class BlackListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         blackListItems = new ArrayList<>();
 
-        for (String appName : SettingsActivity.nonSystemBlackList) {
+        for (String appName : MainActivity.nonSystemBlackList) {
             blackListItems.add(new BlackListItem(appName, false));
         }
 
         blackListAdapter = new BlackListAdapter(getApplicationContext(), blackListItems);
         recyclerView.setAdapter(blackListAdapter);
 
+
+//this is to add system apps after the pressing the Show System Apps button
         final Button showSystemApps= (Button) findViewById(R.id.systemApps);
         showSystemApps.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,7 +50,7 @@ public class BlackListActivity extends AppCompatActivity {
                 else {
                     showSystemApps.setText("Show System Apps");
                 }
-                for (String appName : SettingsActivity.systemBlackList) {
+                for (String appName : MainActivity.systemBlackList) {
                     blackListItems.add(new BlackListItem(appName, false));
                 }
             }

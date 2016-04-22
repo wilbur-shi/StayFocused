@@ -51,6 +51,6 @@ public class BlockingActivity extends AppCompatActivity{
     @Override
     protected void onStop() {
         super.onStop();
-        MainActivity.isBlockingOpen= false;
+        MainActivity.isBlockingOpen = false;
     }
 }
