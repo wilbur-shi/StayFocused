@@ -5,9 +5,11 @@ package com.mdb.wyn.stayfocused;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<String> nonSystemBlackList;
     public static ArrayList<String> systemBlackList;
 
+    BroadcastReceiver closeAppBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +73,18 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        closeAppBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (action.equals("finish_activity")) {
+                    finish();
+                }
+            }
+        };
+        registerReceiver(closeAppBroadcastReceiver, new IntentFilter("finish_activity"));
+
     }
 
     private void createTimer(long ms) {
@@ -82,7 +97,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 timeLeft.addSecond(-1);
                 // Checks running tasks, core functionality
-                checkForTasks();
+                if (!isBlockingOpen) {
+                    checkForTasks();
+                }
                 updateFragmentTextViews();
             }
             @Override
@@ -103,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 System.out.println("TRY CATCH STATEMENT");
                 CharSequence appName = pm2.getApplicationLabel(pm2.getApplicationInfo(appProcess.processName, PackageManager.GET_META_DATA));
-                if (!isBlockingOpen  && appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && nonSystemBlackList.contains(appName)) {
+                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && nonSystemBlackList.contains(appName)) {
                     System.out.println("LOOK HERE"+ appName);
 
                     Intent blockingIntent= new Intent(getApplicationContext(),BlockingActivity.class);
@@ -159,6 +176,12 @@ public class MainActivity extends AppCompatActivity {
         timer.cancel();
         timeLeft.reset();
         timerCreated = false;
+        try {
+            TimerInterface timerFragment = (TimerInterface) adapter.getCurrentFragment();
+            timerFragment.resetTextViews();
+        } catch (ClassCastException cce) {
+            System.out.println("Wrong stufff");
+        }
     }
 
     public void createBlackList() {
@@ -185,9 +208,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-//        check if the timer is already running here
-        super.onDestroy();
+    public void onBackPressed() {
         if (!timeLeft.isZero()){
             new AlertDialog.Builder(MainActivity.this)
                     .setIcon(android.R.drawable.ic_dialog_alert)
@@ -196,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            handleGiveUpButton();
                             finish();
                             System.exit(0);
                         }
@@ -207,6 +229,20 @@ public class MainActivity extends AppCompatActivity {
         else{
             finish();
             System.exit(0);
+        }
+    }
+
+
+
+
+
+    @Override
+    protected void onDestroy() {
+//        check if the timer is already running here
+        super.onDestroy();
+        if (closeAppBroadcastReceiver != null) {
+            unregisterReceiver(closeAppBroadcastReceiver);
+
         }
         //else if the timer is not running yet, do not reset the timer
 

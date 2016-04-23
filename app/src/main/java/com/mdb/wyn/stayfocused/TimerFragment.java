@@ -57,7 +57,6 @@ public class TimerFragment extends Fragment implements TimerInterface {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 activity.handleGiveUpButton();
-                                resetTextViews();
                             }
                         })
                         .setNegativeButton("No", null)
@@ -71,14 +70,17 @@ public class TimerFragment extends Fragment implements TimerInterface {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!activity.timeLeft.isZero()) {
                     activity.handleStartButton();
                     giveUpButton.setVisibility(TextView.VISIBLE);
                     startButton.setVisibility(TextView.GONE);
+                }
             }
         });
     }
 
-    private void resetTextViews() {
+    @Override
+    public void resetTextViews() {
         giveUpButton.setVisibility(View.GONE);
         startButton.setVisibility(View.VISIBLE);
         updateTimeTextView();
