@@ -19,7 +19,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.Window;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -48,10 +50,9 @@ public class MainActivity extends AppCompatActivity {
 //        setSupportActionBar(myToolbar);
 
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-//        tabLayout.addTab(tabLayout.newTab().setText("Tab 1"));
-//        tabLayout.addTab(tabLayout.newTab().setText("Tab 2"));
-//        tabLayout.addTab(tabLayout.newTab().setText("Tab 3"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        setupTabs();
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         adapter = new MyPagerAdapter
@@ -88,6 +89,24 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         registerReceiver(closeAppBroadcastReceiver, new IntentFilter("finish_activity"));
+
+    }
+
+    private void setupTabs() {
+        TextView tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        tabOne.setText("Timer");
+        tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_av_timer_24dp, 0, 0);
+        tabLayout.addTab(tabLayout.newTab().setCustomView(tabOne));
+
+        TextView tabTwo = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        tabTwo.setText("Alarm");
+        tabTwo.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_alarm_24dp, 0, 0);
+        tabLayout.addTab(tabLayout.newTab().setCustomView(tabTwo));
+
+        TextView tabThree = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        tabThree.setText("Settings");
+        tabThree.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_settings_black_24dp, 0, 0);
+        tabLayout.addTab(tabLayout.newTab().setCustomView(tabThree));
 
     }
 
