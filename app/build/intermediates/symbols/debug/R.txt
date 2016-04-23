@@ -597,16 +597,24 @@ int id action_menu_presenter 0x7f0d0003
 int id action_mode_bar 0x7f0d0057
 int id action_mode_bar_stub 0x7f0d0056
 int id action_mode_close_button 0x7f0d003c
+<<<<<<< HEAD
 int id action_settings 0x7f0d009d
 int id activationSwitch 0x7f0d007e
+=======
+int id action_settings 0x7f0d009b
+>>>>>>> e27b3caf06c69e7dc57b1c3cc59a851e2a597a84
 int id activity_chooser_view_content 0x7f0d003d
 int id alertTitle 0x7f0d0049
 int id always 0x7f0d0033
 int id appNameTextView 0x7f0d007c
 int id backToWork 0x7f0d007f
 int id beginning 0x7f0d0031
+<<<<<<< HEAD
 int id blackListButton 0x7f0d009c
 int id blackListTextView 0x7f0d0072
+=======
+int id blackListTextView 0x7f0d006f
+>>>>>>> e27b3caf06c69e7dc57b1c3cc59a851e2a597a84
 int id bottom 0x7f0d001d
 int id buttonPanel 0x7f0d0044
 int id cancel_action 0x7f0d0090

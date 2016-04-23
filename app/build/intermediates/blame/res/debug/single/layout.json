@@ -4,6 +4,7 @@
         "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\src\\main\\res\\layout\\activity_main.xml"
     },
     {
+<<<<<<< HEAD
         "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\layout\\content_timer.xml",
         "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\src\\main\\res\\layout\\content_timer.xml"
     },
@@ -14,6 +15,18 @@
     {
         "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_bar_view_list_nav_layout.xml",
         "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.0\\res\\layout\\abc_action_bar_view_list_nav_layout.xml"
+=======
+        "merged": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\layout\\design_layout_snackbar_include.xml",
+        "source": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\exploded-aar\\com.android.support\\design\\23.2.0\\res\\layout\\design_layout_snackbar_include.xml"
+    },
+    {
+        "merged": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\layout\\design_layout_snackbar.xml",
+        "source": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\exploded-aar\\com.android.support\\design\\23.2.0\\res\\layout\\design_layout_snackbar.xml"
+    },
+    {
+        "merged": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_alert_dialog_button_bar_material.xml",
+        "source": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.0\\res\\layout\\abc_alert_dialog_button_bar_material.xml"
+>>>>>>> e27b3caf06c69e7dc57b1c3cc59a851e2a597a84
     },
     {
         "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\layout\\select_dialog_item_material.xml",
