@@ -10,11 +10,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
@@ -36,7 +38,9 @@ public class MainActivity extends AppCompatActivity {
     public static boolean isBlockingOpen = false;
     public static ArrayList<String> nonSystemAppList;
     public static ArrayList<String> systemAppList;
+    public static ArrayList<String> blackList;
     public boolean timerIsRunning = false;
+    public CustomSharedPreferences customPrefs;
 
     BroadcastReceiver closeAppBroadcastReceiver;
 
@@ -44,9 +48,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
-//
-//        setSupportActionBar(myToolbar);
 
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -89,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
         };
         registerReceiver(closeAppBroadcastReceiver, new IntentFilter("finish_activity"));
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        customPrefs = new CustomSharedPreferences(prefs);
     }
 
     private void setupTabs() {

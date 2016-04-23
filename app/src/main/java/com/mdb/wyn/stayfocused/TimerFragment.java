@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 /**
@@ -26,8 +27,8 @@ public class TimerFragment extends Fragment implements TimerInterface {
         activity = (MainActivity) getActivity();
         View view = inflater.inflate(R.layout.timer_fragment, container, false);
         timeSetTextView = (TextView) view.findViewById(R.id.timeSetTextView);
-        startButton = (TextView) view.findViewById(R.id.startButton);
-        giveUpButton = (TextView) view.findViewById(R.id.giveUpTextView);
+        startButton = (Button) view.findViewById(R.id.startButton);
+        giveUpButton = (Button) view.findViewById(R.id.giveUpTextView);
         setGiveUpButton();
         setStartButton();
         setTimeSetTextView();

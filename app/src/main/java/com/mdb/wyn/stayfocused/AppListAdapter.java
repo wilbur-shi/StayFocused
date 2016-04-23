@@ -65,7 +65,7 @@ import java.util.ArrayList;
 //                    @Override
 //                    public void onClick(View v) {
 //                        int row= getAdapterPosition();
-//                        appListArray.get(row).isBlacklisted= ! appListArray.get(row).isBlacklisted;
+//                        blackListArray.get(row).isBlacklisted= ! blackListArray.get(row).isBlacklisted;
 //
 //
 //                    }

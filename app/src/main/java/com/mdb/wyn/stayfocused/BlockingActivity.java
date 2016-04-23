@@ -9,14 +9,15 @@ import android.os.Bundle;
 
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 /**
  * Created by Young on 4/9/2016.
  */
 public class BlockingActivity extends AppCompatActivity{
-    TextView backToWork;
-    TextView giveUp;
+    Button backToWork;
+    Button giveUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +25,8 @@ public class BlockingActivity extends AppCompatActivity{
         setContentView(R.layout.blocking_activity);
         MainActivity.isBlockingOpen= true;
 
-        backToWork= (TextView) findViewById(R.id.backToWork);
-        giveUp= (TextView) findViewById(R.id.giveUp);
+        backToWork= (Button) findViewById(R.id.backToWork);
+        giveUp= (Button) findViewById(R.id.giveUp);
 
         //back to the home page
         backToWork.setOnClickListener(new View.OnClickListener() {

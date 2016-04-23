@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!--notifications stuff-->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:titleTextColor="#FFFF"
+        android:elevation="6dp"
+        android:layout_alignParentTop="true"
+        android:minHeight="?attr/actionBarSize"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Notifications"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/notificationsTextView"
+        android:layout_below="@id/toolbar"
+        android:layout_marginTop="65dp"
+        android:layout_marginLeft="7dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />
@@ -28,6 +42,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#000000"
         android:id="@+id/notificationsblocking"
+        android:layout_marginLeft="10dp"
         android:layout_below="@+id/notificationsTextView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp" />
@@ -49,6 +64,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/blackListTextView"
         android:layout_below="@+id/switch1"
+        android:layout_marginLeft="7dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="20dp" />
@@ -67,6 +83,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#000000"
         android:id="@+id/optionalTextView"
+        android:layout_marginLeft="10dp"
         android:layout_below="@+id/blackListTextView"
         android:visibility="visible"
         android:layout_centerHorizontal="true"
@@ -78,8 +95,7 @@
         android:id="@+id/settingsRecyclerView"
         android:layout_below="@+id/blackListTextView"
         android:layout_marginTop="30dp"
-        />
-
+        android:layout_marginRight="15dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -87,8 +103,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:src="@drawable/ic_add_black_24dp"
-        android:layout_below="@+id/settingsRecyclerView"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:layout_alignRight="@+id/view"
         android:layout_alignEnd="@+id/view"
-        android:layout_marginTop="5dp" />
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp" />
+    <!--android:layout_below="@+id/settingsRecyclerView"-->
+
 </RelativeLayout>
