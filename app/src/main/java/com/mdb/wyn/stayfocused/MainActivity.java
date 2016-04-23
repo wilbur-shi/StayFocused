@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     public static boolean isBlockingOpen = false;
     public static ArrayList<String> nonSystemBlackList;
     public static ArrayList<String> systemBlackList;
+    public boolean timerIsRunning = false;
 
     BroadcastReceiver closeAppBroadcastReceiver;
 
@@ -80,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
                 String action = intent.getAction();
                 if (action.equals("finish_activity")) {
                     finish();
+                    System.out.println("received broadcast");
+                    System.exit(0);
                 }
             }
         };
@@ -88,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createTimer(long ms) {
+        timerIsRunning = true;
         timer = new CountDownTimer(ms, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -107,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 timeLeft.addSecond(-1);
                 updateFragmentTextViews();
                 Toast.makeText(getApplicationContext(), "Time is up", Toast.LENGTH_SHORT).show();
+                timerIsRunning = false;
             }
         };
     }
@@ -118,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         PackageManager pm2= getApplicationContext().getPackageManager();
         for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
             try {
-                System.out.println("TRY CATCH STATEMENT");
+//                System.out.println("TRY CATCH STATEMENT");
                 CharSequence appName = pm2.getApplicationLabel(pm2.getApplicationInfo(appProcess.processName, PackageManager.GET_META_DATA));
                 if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && nonSystemBlackList.contains(appName)) {
                     System.out.println("LOOK HERE"+ appName);
@@ -208,8 +213,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        if (!timeLeft.isZero()){
+    protected void onDestroy() {
+//        check if the timer is already running here
+        super.onDestroy();
+        if (!timeLeft.isZero() && !timerIsRunning){
             new AlertDialog.Builder(MainActivity.this)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setTitle("Are you sure?")
@@ -230,19 +237,9 @@ public class MainActivity extends AppCompatActivity {
             finish();
             System.exit(0);
         }
-    }
-
-
-
-
-
-    @Override
-    protected void onDestroy() {
-//        check if the timer is already running here
-        super.onDestroy();
         if (closeAppBroadcastReceiver != null) {
             unregisterReceiver(closeAppBroadcastReceiver);
-
+            System.out.println("unregistered receiver");
         }
         //else if the timer is not running yet, do not reset the timer
 

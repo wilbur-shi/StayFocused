@@ -4,9 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 
@@ -24,7 +22,7 @@ public class BlackListActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.recycler_view);
+        setContentView(R.layout.activity_applist);
         selectAll= (CheckBox) findViewById(R.id.selectAll);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);

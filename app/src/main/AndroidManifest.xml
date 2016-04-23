@@ -28,7 +28,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BlackListActivity" />
+        <activity android:name=".BlackListActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".BlockingActivity"/>
     </application>
 
