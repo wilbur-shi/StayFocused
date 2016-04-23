@@ -5,6 +5,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceFragment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,18 +17,14 @@ import java.util.List;
 public class SettingsActivity extends AppCompatActivity {
     static ArrayList<String> nonSystemBlackList;
     static ArrayList<String> systemBlackList;
-    ImageButton blackListButton;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-//        getFragmentManager().beginTransaction().replace(android.R.id.content, new PreferenceScreenFragment()).commit();
-        System.out.println("GOT TO BUTTON");
-        blackListButton= (ImageButton) findViewById(R.id.blackListButton);
-
-        blackListButton.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 System.out.println("GOT TO ONCLICK");
@@ -36,16 +33,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
-//    public static class PreferenceScreenFragment extends PreferenceFragment {
-//        @Override
-//        public void onCreate(Bundle savedInstanceState) {
-//            super.onCreate(savedInstanceState);
-//            addPreferencesFromResource(R.xml.preferences);
-//
-//
-//
-//        }
-//    }
 
 
     public void blackListCreator() {

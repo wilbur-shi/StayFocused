@@ -7,12 +7,95 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.mdb.wyn.stayfocused.SettingsActivity">
+    tools:context="com.mdb.wyn.stayfocused.SettingsActivity"
+    style="@style/AlertDialog.AppCompat.Light">
 
-    <ImageButton
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:src="@drawable/ic_add_circle_outline_black_24dp"
-        android:id="@+id/blackListButton"/>
+    <!--notifications stuff-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Notifications"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/notificationsTextView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
 
+    <View
+        android:layout_width="350dp"
+        android:layout_height="1dp"
+        android:layout_below="@+id/notificationsTextView"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorAccent"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Notifications Blocking"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#000000"
+        android:id="@+id/notificationsblocking"
+        android:layout_below="@+id/notificationsTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/switch1"
+        android:layout_alignTop="@+id/notificationsblocking"
+        android:layout_alignRight="@+id/notificationsblocking"
+        android:layout_alignEnd="@+id/notificationsblocking" />
+
+    <!--blacklist-->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Blacklist"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/blackListTextView"
+        android:layout_below="@+id/switch1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp" />
+    <View
+        android:layout_width="350dp"
+        android:layout_height="1dp"
+        android:layout_below="@+id/blackListTextView"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorAccent"
+        android:id="@+id/view" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="You currently have no blacklisted apps."
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#000000"
+        android:id="@+id/optionalTextView"
+        android:layout_below="@+id/blackListTextView"
+        android:visibility="visible"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/settingsRecyclerView"
+        android:layout_below="@+id/blackListTextView"
+        android:layout_marginTop="30dp"
+        />
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_add_black_24dp"
+        android:layout_below="@+id/settingsRecyclerView"
+        android:layout_alignRight="@+id/view"
+        android:layout_alignEnd="@+id/view"
+        android:layout_marginTop="5dp" />
 </RelativeLayout>

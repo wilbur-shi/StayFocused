@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:text="Back to Work"
         android:textSize="25dp"
-        android:textColor="@color/red"
+        android:textColor="@color/colorPrimaryDark"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="30dp"
         android:layout_alignParentLeft="true"
@@ -33,35 +33,6 @@
         android:layout_centerHorizontal="true"
         android:background="@android:color/black"/>
 
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
-        <!--android:text="Hours"-->
-        <!--android:id="@+id/hours"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_alignLeft="@+id/backToWork"-->
-        <!--android:layout_alignStart="@+id/backToWork"-->
-        <!--android:layout_marginTop="90dp" />-->
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
-        <!--android:text="Minutess"-->
-        <!--android:id="@+id/minutes"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_alignLeft="@+id/backToWork"-->
-        <!--android:layout_alignStart="@+id/backToWork"-->
-        <!--android:layout_marginTop="90dp" />-->
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
-        <!--android:text="Secondss"-->
-        <!--android:id="@+id/seconds"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_alignLeft="@+id/backToWork"-->
-        <!--android:layout_alignStart="@+id/backToWork"-->
-        <!--android:layout_marginTop="90dp" />-->
+
 
 </RelativeLayout>

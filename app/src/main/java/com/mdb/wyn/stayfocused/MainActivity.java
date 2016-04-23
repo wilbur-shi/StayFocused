@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         if (closeAppBroadcastReceiver != null) {
             unregisterReceiver(closeAppBroadcastReceiver);
-
+            System.out.println("unregistered receiver");
         }
         //else if the timer is not running yet, do not reset the timer
 
