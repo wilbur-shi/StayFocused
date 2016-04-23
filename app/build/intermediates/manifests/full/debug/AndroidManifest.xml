@@ -9,11 +9,6 @@
         android:targetSdkVersion="23" />
 
     <uses-permission android:name="android.permission.READ_LOGS" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.REORDER_TASKS" />
-    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.REORDER_TASKS" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
 
@@ -33,7 +28,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.mdb.wyn.stayfocused.BlackListActivity" />
+        <activity
+            android:name="com.mdb.wyn.stayfocused.BlackListActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name="com.mdb.wyn.stayfocused.BlockingActivity" />
     </application>
 

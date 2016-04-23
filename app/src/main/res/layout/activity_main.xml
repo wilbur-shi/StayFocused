@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TimerActivity">
+    tools:context=".MainActivity">
 
     <!--<android.support.v7.widget.Toolbar-->
         <!--android:id="@+id/toolbar"-->
@@ -31,17 +31,20 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
         <android.support.design.widget.TabItem
-            android:text="thingy"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:text="Timer"
+            android:layout_height="24dp"
+            android:layout_width="wrap_content"
+            android:icon="@drawable/ic_av_timer_24dp"/>
         <android.support.design.widget.TabItem
-            android:text="thingy"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:text="Alarm"
+            android:layout_height="24dp"
+            android:layout_width="wrap_content"
+            android:icon="@drawable/ic_watch_later_black_24dp"/>
         <android.support.design.widget.TabItem
-            android:text="thingy"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:text="Settings"
+            android:layout_height="24dp"
+            android:layout_width="wrap_content"
+            android:icon="@drawable/ic_settings_black_24dp"/>
 
     </android.support.design.widget.TabLayout>
 

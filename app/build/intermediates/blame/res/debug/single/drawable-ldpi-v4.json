@@ -1,5 +1,21 @@
 [
     {
+        "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi-v4\\ic_add_black_24dp.png",
+        "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\generated\\res\\pngs\\debug\\drawable-ldpi\\ic_add_black_24dp.png"
+    },
+    {
+        "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi-v4\\ic_av_timer_24dp.png",
+        "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\generated\\res\\pngs\\debug\\drawable-ldpi\\ic_av_timer_24dp.png"
+    },
+    {
+        "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi-v4\\ic_watch_later_black_24dp.png",
+        "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\generated\\res\\pngs\\debug\\drawable-ldpi\\ic_watch_later_black_24dp.png"
+    },
+    {
+        "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi-v4\\ic_settings_black_24dp.png",
+        "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\generated\\res\\pngs\\debug\\drawable-ldpi\\ic_settings_black_24dp.png"
+    },
+    {
         "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi-v4\\ic_add_circle_outline_black_24dp.png",
         "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\generated\\res\\pngs\\debug\\drawable-ldpi\\ic_add_circle_outline_black_24dp.png"
     }
