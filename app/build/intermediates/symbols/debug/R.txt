@@ -596,14 +596,13 @@ int id action_menu_presenter 0x7f0d0003
 int id action_mode_bar 0x7f0d0057
 int id action_mode_bar_stub 0x7f0d0056
 int id action_mode_close_button 0x7f0d003c
-int id action_settings 0x7f0d009c
+int id action_settings 0x7f0d009b
 int id activity_chooser_view_content 0x7f0d003d
 int id alertTitle 0x7f0d0049
 int id always 0x7f0d0033
 int id appNameTextView 0x7f0d0099
 int id backToWork 0x7f0d0079
 int id beginning 0x7f0d0031
-int id blackListButton 0x7f0d009b
 int id blackListTextView 0x7f0d006f
 int id bottom 0x7f0d001d
 int id buttonPanel 0x7f0d0044

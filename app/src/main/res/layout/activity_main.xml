@@ -34,7 +34,7 @@
             android:text="Timer"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:icon=""/>
+            />
         <android.support.design.widget.TabItem
             android:text="Alarm"
             android:layout_height="wrap_content"
