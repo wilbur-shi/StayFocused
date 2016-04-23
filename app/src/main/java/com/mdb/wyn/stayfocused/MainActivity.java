@@ -20,7 +20,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private MyPagerAdapter adapter;
     private TabLayout tabLayout;
     public static boolean isBlockingOpen = false;
-    public static ArrayList<String> nonSystemBlackList;
-    public static ArrayList<String> systemBlackList;
+    public static ArrayList<String> nonSystemAppList;
+    public static ArrayList<String> systemAppList;
     public boolean timerIsRunning = false;
 
     BroadcastReceiver closeAppBroadcastReceiver;
@@ -145,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
             try {
 //                System.out.println("TRY CATCH STATEMENT");
                 CharSequence appName = pm2.getApplicationLabel(pm2.getApplicationInfo(appProcess.processName, PackageManager.GET_META_DATA));
-                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && nonSystemBlackList.contains(appName)) {
+                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && nonSystemAppList.contains(appName)) {
                     System.out.println("LOOK HERE"+ appName);
 
                     Intent blockingIntent= new Intent(getApplicationContext(),BlockingActivity.class);
@@ -211,8 +210,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void createBlackList() {
         System.out.println("GOT TO METHOD");
-        nonSystemBlackList = new ArrayList<>();
-        systemBlackList= new ArrayList<>();
+        nonSystemAppList = new ArrayList<>();
+        systemAppList = new ArrayList<>();
         PackageManager pm = getApplicationContext().getPackageManager();
         List<PackageInfo> list = pm.getInstalledPackages(0);
         try {
@@ -220,10 +219,10 @@ public class MainActivity extends AppCompatActivity {
                 ApplicationInfo ai = pm.getApplicationInfo(pi.packageName, 0);
                 String currAppName = pm.getApplicationLabel(ai).toString();
                 if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 0 && ! currAppName.equals("StayFocused")) {
-                    nonSystemBlackList.add(currAppName);
+                    nonSystemAppList.add(currAppName);
                 }
                 else if (! currAppName.equals("StayFocused")){
-                    systemBlackList.add(currAppName);
+                    systemAppList.add(currAppName);
                     System.out.println("YOUNG JUST ADDED"+currAppName);
                 }
             }

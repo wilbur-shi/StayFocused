@@ -31,7 +31,7 @@ public class SettingsFragment extends Fragment {
 //            public void onClick(View v) {
 //                System.out.println("GOT TO ONCLICK");
 //                activity.createBlackList();
-//                Intent blacklistIntent = new Intent(activity.getApplicationContext(), BlackListActivity.class);
+//                Intent blacklistIntent = new Intent(activity.getApplicationContext(), AppListActivity.class);
 //                activity.startActivity(blacklistIntent);
 //                System.out.println("GOT TO INTENT");
 //            }
