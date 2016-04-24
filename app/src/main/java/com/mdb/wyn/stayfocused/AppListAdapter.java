@@ -41,7 +41,7 @@ import java.util.ArrayList;
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     appListItem.isBlacklisted = isChecked;
 //                    System.out.println("on check change listener");
-                    notifyDataSetChanged();
+//                    notifyDataSetChanged();
                     //result of changing the checkbox
                     //dunno if need to notify datasetchanged
                 }

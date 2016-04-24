@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private static MyPagerAdapter adapter;
     private TabLayout tabLayout;
+    public boolean isAlarmMode = false;
     public static boolean isBlockingOpen = false;
     public static boolean timerIsRunning = false;
     private static Context context;
@@ -123,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals("start_alarm")) {
                 handleStartButton("alarm");
+                System.out.println("got to reeive, is going to start alarm button");
             }
         }
     };
@@ -155,7 +157,11 @@ public class MainActivity extends AppCompatActivity {
                 if (minLeft <= 5) {
                     //Toast.makeText(getApplicationContext(), String.format("%d min left", minLeft), Toast.LENGTH_SHORT).show();
                 }
-                timeLeft.addSecond(-1);
+                if (isAlarmMode) {
+                    alarmTimeLeft.addSecond(-1);
+                } else {
+                    timeLeft.addSecond(-1);
+                }
                 // Checks running tasks, core functionality
                 if (!isBlockingOpen) {
                     checkForTasks();
@@ -264,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else if (type.equals("alarm")&& !timerCreated && !alarmTimeLeft.isZero()) {
             createTimer(alarmTimeLeft.totalTimeInMs());
+            isAlarmMode = true;
             timer.start();
             timerCreated = true;
         }
@@ -336,6 +343,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
             System.exit(0);
         }
+        unregisterReceiver(alarmReceiver);
         if (closeAppBroadcastReceiver != null) {
             unregisterReceiver(closeAppBroadcastReceiver);
             System.out.println("unregistered receiver");

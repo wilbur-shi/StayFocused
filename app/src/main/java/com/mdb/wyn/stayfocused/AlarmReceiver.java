@@ -15,7 +15,7 @@ public class AlarmReceiver extends BroadcastReceiver{
         System.out.println("Received");
         int requestCode = intent.getExtras().getInt("requestcode");
         if (requestCode==1){
-            context.sendBroadcast(new Intent("start_time"));
+            context.sendBroadcast(new Intent("start_alarm"));
             System.out.println("received first oneeeeeeeeee");
 
 
