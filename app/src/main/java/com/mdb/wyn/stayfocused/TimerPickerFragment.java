@@ -42,20 +42,19 @@ public class TimerPickerFragment extends DialogFragment
             startingCalendar= Calendar.getInstance();
             startingCalendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
             startingCalendar.set(Calendar.MINUTE, minute);
-            if (startingCalendar.getTimeInMillis()< System.currentTimeMillis()){
-            startingCalendar.roll(Calendar.DATE,1);}
-            TimerPickerFragment.calculatealarmtimeleft();
+
 
         }
         else if (mode==2){
             endingCalendar= Calendar.getInstance();
             endingCalendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
             endingCalendar.set(Calendar.MINUTE,minute);
-            if (endingCalendar.getTimeInMillis()< System.currentTimeMillis()){
-            endingCalendar.roll(Calendar.DATE,1);}
-            TimerPickerFragment.calculatealarmtimeleft();
 
         }
+        if (startingCalendar.getTimeInMillis()< System.currentTimeMillis() || endingCalendar.getTimeInMillis()< System.currentTimeMillis()){
+            startingCalendar.roll(Calendar.DATE,1);
+        endingCalendar.roll(Calendar.DATE,1);}
+        TimerPickerFragment.calculatealarmtimeleft();
 
         ((MainActivity)getActivity()).setTimeSet(hourOfDay, minute, mode);
 

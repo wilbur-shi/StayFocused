@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
@@ -309,5 +310,13 @@ public class MainActivity extends AppCompatActivity {
         alarmManager.set(AlarmManager.RTC_WAKEUP,TimerPickerFragment.endingCalendar.getTimeInMillis(), PendingIntent.getBroadcast(this,2,  endingIntent, PendingIntent.FLAG_UPDATE_CURRENT));
         Toast.makeText(this, "Ending Alarm Scheduled", Toast.LENGTH_LONG).show();
 
+    }
+
+    public void silenceNotifications() {
+        final AudioManager mode = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+        //save this shit to sharedprefs
+        mode.getRingerMode();
+
+        mode.setRingerMode(AudioManager.RINGER_MODE_SILENT);
     }
 }

@@ -10,6 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import java.util.ArrayList;
 
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 public class SettingsFragment extends Fragment {
     private MainActivity activity;
     FloatingActionButton fab;
+    Switch aSwitch;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -26,6 +29,18 @@ public class SettingsFragment extends Fragment {
         View view = inflater.inflate(R.layout.settings_fragment, container, false);
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolbar.setTitle("Settings");
+
+        aSwitch= (Switch) view.findViewById(R.id.switch1);
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+             if (isChecked){
+                 activity.silenceNotifications();
+             }
+            else {
+                 //call the variable from shared prefs, change it back to the original settings
+             }
+            }
+        });
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.settingsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
