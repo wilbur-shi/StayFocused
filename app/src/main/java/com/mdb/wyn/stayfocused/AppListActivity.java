@@ -3,6 +3,7 @@ package com.mdb.wyn.stayfocused;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -34,6 +35,14 @@ public class AppListActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        DefaultItemAnimator animator = new DefaultItemAnimator() {
+            @Override
+            public boolean canReuseUpdatedViewHolder(RecyclerView.ViewHolder viewHolder) {
+                return true;
+            }
+        };
+        recyclerView.setItemAnimator(animator);
+
         appListItems = new ArrayList<>();
 
         prefs = MainActivity.customPrefs;
@@ -46,7 +55,6 @@ public class AppListActivity extends AppCompatActivity {
             }
             appListItems.add(new AppListItem(appName, isChecked));
         }
-
         appListAdapter = new AppListAdapter(getApplicationContext(), appListItems);
         recyclerView.setAdapter(appListAdapter);
 
@@ -108,6 +116,8 @@ public class AppListActivity extends AppCompatActivity {
         for (AppListItem item : appListItems) {
             if (item.isBlacklisted) {
                 blacklist.add(item.appName);
+            } else {
+                prefs.removeFromBlackList(item.appName);
             }
         }
         System.out.println("before shared prefs, local blacklist is " + blacklist);

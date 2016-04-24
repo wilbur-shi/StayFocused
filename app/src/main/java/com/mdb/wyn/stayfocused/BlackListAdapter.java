@@ -40,7 +40,8 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.Cust
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 appListItem.isBlacklisted = isChecked;
-                notifyDataSetChanged();
+                MainActivity.customPrefs.changeChecked(appListItem.appName, appListItem.isBlacklisted);
+//                notifyDataSetChanged();
                 //result of changing the checkbox
                 //dunno if need to notify datasetchanged
             }

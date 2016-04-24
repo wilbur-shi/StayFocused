@@ -77,7 +77,7 @@ public class AlarmFragment extends Fragment implements TimerInterface{
         });
     }
     @Override
-    public void resetTextViews() {
+    public void resetButtons() {
         updateTimeTextView();
     }
     @Override

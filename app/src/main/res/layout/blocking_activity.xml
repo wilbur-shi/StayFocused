@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:text="Back to Work"
         android:textSize="20sp"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/blue"
         android:id="@+id/backToWork"
         android:layout_alignTop="@+id/giveUp"
         style="?android:attr/borderlessButtonStyle"

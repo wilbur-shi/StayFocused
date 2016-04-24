@@ -40,51 +40,26 @@ public class TimerPickerFragment extends DialogFragment
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         // Do something with the time chosen by the user
         System.out.println("ran nigga" + hourOfDay + " " + mode);
+        if (mode == 0) {
+            context.setTimeSet(hourOfDay, minute, mode);
+        }
         if (mode==1){
             startingCalendar= Calendar.getInstance();
-            startingCalendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+            startingCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             startingCalendar.set(Calendar.MINUTE, minute);
             if (startingCalendar.getTimeInMillis()< System.currentTimeMillis()){
             startingCalendar.roll(Calendar.DATE,1);}
-            ((MainActivity)getActivity()).setTimeSet(hourOfDay, minute, mode);
-
-//            calculatealarmtimeleft();
+            context.setTimeSet(hourOfDay, minute, mode);
 
         }
         else if (mode==2){
             endingCalendar= Calendar.getInstance();
-            endingCalendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+            endingCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             endingCalendar.set(Calendar.MINUTE,minute);
             if (endingCalendar.getTimeInMillis()< System.currentTimeMillis()){
             endingCalendar.roll(Calendar.DATE,1);}
-            ((MainActivity)getActivity()).setTimeSet(hourOfDay, minute, mode);
-            calculatealarmtimeleft();
+            context.setTimeSet(hourOfDay, minute, mode);
+//            context.calculateAlarmTimeLeft();
         }
-//        ((TimerActivity)getActivity()).setTimeSet(hourOfDay, minute);
     }
-
-
-
-
- private void calculatealarmtimeleft() {
-//    int hours= endingCalendar.HOUR_OF_DAY-startingCalendar.HOUR_OF_DAY;
-//    int min= endingCalendar.MINUTE-startingCalendar.MINUTE;
-
-     int hours = context.endingTime.getHour() - context.startingTime.getHour();
-     int min = context.endingTime.getMinute() - context.startingTime.getMinute();
-
-     if (min<0){
-         hours= hours-1;
-         min=min+60;
-     }
-     System.out.println("Hours " + hours);
-     System.out.println("Minutes " + min);
-
-     if (hours<0 || (hours==0 && min<=0)){
-         MainActivity.alarmTimeLeft= new Time(0,0,0,"timer");
-              }
-     else{MainActivity.alarmTimeLeft= new Time(hours,min,0,"timer");
-     }
-    }
-
 }

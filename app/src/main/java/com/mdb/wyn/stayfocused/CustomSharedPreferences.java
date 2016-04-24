@@ -28,42 +28,37 @@ public class CustomSharedPreferences {
         SharedPreferences.Editor editor = mSharedPrefs.edit();
 
         editor.putStringSet(key, list);
-//        for (AppListItem item : list) {
-//            appNames.add(item.appName);
-//            if (!blacklistMap.containsKey(item.appName)) {
-//                blacklistMap.put(item.appName, item.isBlacklisted);
-//            }
-//        }
+        for (String name : list) {
+            editor.putBoolean(name, true);
+        }
         editor.apply();
     }
 
     public void changeChecked(String appName, boolean isChecked) {
-        SharedPreferences.Editor editor = mSharedPrefs.edit();
-        editor.putBoolean(appName, isChecked);
-        editor.apply();
+        if (mSharedPrefs.contains(appName)) {
+            SharedPreferences.Editor editor = mSharedPrefs.edit();
+            editor.putBoolean(appName, isChecked);
+            editor.apply();
+        }
     }
 
     public void removeFromBlackList(String appName) {
         SharedPreferences.Editor editor = mSharedPrefs.edit();
-        Set<String> blacklist = getSet(BLACKLIST_KEY);
-        blacklist.remove(appName);
-        editor.putStringSet(BLACKLIST_KEY, blacklist);
+        editor.remove(appName);
         editor.apply();
     }
 
-    public void addToBlackList(String appName) {
-        SharedPreferences.Editor editor = mSharedPrefs.edit();
-        Set<String> blacklist = getSet(BLACKLIST_KEY);
-        blacklist.add(appName);
-        editor.putStringSet(BLACKLIST_KEY, blacklist);
-        editor.apply();
-    }
+//    public void addBlackListedApp(String appName) {
+//        SharedPreferences.Editor editor = mSharedPrefs.edit();
+//        editor.putBoolean(appName, true);
+//        editor.apply();
+//    }
 
     public Set<String> getSet(String key) {
         return mSharedPrefs.getStringSet(key, null);
     }
 
-    public boolean getCheckedPref(String key) {
-        return mSharedPrefs.getBoolean(key, false);
+    public boolean getCheckedPref(String appName) {
+        return mSharedPrefs.getBoolean(appName, false);
     }
 }

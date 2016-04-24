@@ -32,7 +32,7 @@ public class TimerFragment extends Fragment implements TimerInterface {
         setGiveUpButton();
         setStartButton();
         setTimeSetTextView();
-        resetTextViews();
+        resetButtons();
 
         return view;
     }
@@ -81,7 +81,7 @@ public class TimerFragment extends Fragment implements TimerInterface {
     }
 
     @Override
-    public void resetTextViews() {
+    public void resetButtons() {
         giveUpButton.setVisibility(View.GONE);
         startButton.setVisibility(View.VISIBLE);
         updateTimeTextView();

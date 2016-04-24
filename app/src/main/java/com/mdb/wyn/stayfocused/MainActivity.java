@@ -19,20 +19,14 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.view.Window;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
 
@@ -49,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean isAlarmMode = false;
     public static boolean isBlockingOpen = false;
     public static boolean timerIsRunning = false;
-    private static Context context;
+    private Context context;
     private static ActivityManager activityManager;
     public static ArrayList<String> nonSystemAppList;
     public static ArrayList<String> systemAppList;
@@ -80,10 +74,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-//                if (tab.getPosition() == 3) {
-//                    SettingsFragment settings = (SettingsFragment) adapter.getCurrentFragment();
-//                    settings.changeData();
-//                }
             }
 
             @Override
@@ -113,9 +103,9 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         customPrefs = new CustomSharedPreferences(prefs);
 
-        if (customPrefs.getSet(CustomSharedPreferences.APPNAMES_KEY) == null) {
-            createAppList();
-        }
+//        if (customPrefs.getSet(CustomSharedPreferences.APPNAMES_KEY) == null) {
+        createAppList();
+//        }
 
         registerReceiver(alarmReceiver, new IntentFilter("start_alarm"));
     }
@@ -146,6 +136,27 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setCustomView(tabThree));
 
     }
+
+    public void calculateAlarmTimeLeft() {
+//            int hours= endingCalendar.HOUR_OF_DAY-startingCalendar.HOUR_OF_DAY;
+    //    int min= endingCalendar.MINUTE-startingCalendar.MINUTE;
+
+            int hours = endingTime.getHour() - startingTime.getHour();
+            int min = endingTime.getMinute() - startingTime.getMinute();
+
+            if (min<0){
+                hours= hours-1;
+                min=min+60;
+            }
+            System.out.println("Hours " + hours);
+            System.out.println("Minutes " + min);
+
+            if (hours<0 || (hours==0 && min<=0)){
+                alarmTimeLeft= new Time(0,0,0,"timer");
+            } else {
+                alarmTimeLeft= new Time(hours,min,0,"timer");
+            }
+    }
 //STATIC?
     private void createTimer(long ms) {
         timerIsRunning = true;
@@ -172,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish() {
                 timeLeft.addSecond(-1);
                 updateFragmentTextViews();
-                Toast.makeText(context, "Time is up", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Congratulations, you finished your work! Yay!", Toast.LENGTH_SHORT).show();
                 timerIsRunning = false;
             }
         };
@@ -198,12 +209,12 @@ public class MainActivity extends AppCompatActivity {
             try {
 //                System.out.println("TRY CATCH STATEMENT");
                 CharSequence appName = pm2.getApplicationLabel(pm2.getApplicationInfo(appProcess.processName, PackageManager.GET_META_DATA));
-                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && blackList.contains(appName)) {
-                    System.out.println("LOOK HERE"+ appName);
+                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && blackList.contains(appName) && customPrefs.getCheckedPref(appName.toString())) {
+//                    System.out.println("LOOK HERE"+ appName);
 
                     Intent blockingIntent= new Intent(context,BlockingActivity.class);
                     PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, blockingIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-                    System.out.println("GOT TO PENDINGINTENT");
+//                    System.out.println("GOT TO PENDINGINTENT");
                     try {
                         // Perform the operation associated with our pendingIntent
                         pendingIntent.send();
@@ -246,9 +257,11 @@ public class MainActivity extends AppCompatActivity {
         timeLeft = new Time(hours, minutes, 0, "timer");}
         else if (mode==1){
             startingTime= new Time(hours,minutes,0,"alarm");
+            calculateAlarmTimeLeft();
         }
         else if (mode==2){
             endingTime= new Time(hours,minutes,0,"alarm");
+            calculateAlarmTimeLeft();
         }
 
         updateFragmentTextViews();
@@ -282,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
         timerCreated = false;
         try {
             TimerInterface timerFragment = (TimerInterface) adapter.getCurrentFragment();
-            timerFragment.resetTextViews();
+            timerFragment.resetButtons();
         } catch (ClassCastException cce) {
             System.out.println("Wrong stufff");
         }
@@ -302,12 +315,12 @@ public class MainActivity extends AppCompatActivity {
                 String currAppName = pm.getApplicationLabel(ai).toString();
                 int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
                 if ((ai.flags & mask) == 0 && ! currAppName.equals("StayFocused")) {
-                    nonSystemAppList.add(currAppName);
+                    appNames.add(currAppName);
                 }
                 else if (! currAppName.equals("StayFocused")){
-                    systemAppList.add(currAppName);
+                    systemApps.add(currAppName);
                 }
-                System.out.println("YOUNG JUST ADDED"+currAppName);
+//                System.out.println("YOUNG JUST ADDED"+currAppName);
 
             }
             customPrefs.saveList(CustomSharedPreferences.APPNAMES_KEY, appNames);
