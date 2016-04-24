@@ -293,13 +293,15 @@ public class MainActivity extends AppCompatActivity {
             for (PackageInfo pi : list) {
                 ApplicationInfo ai = pm.getApplicationInfo(pi.packageName, 0);
                 String currAppName = pm.getApplicationLabel(ai).toString();
-                if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 0 && !currAppName.equals("StayFocused")) {
-                    appNames.add(currAppName);
+                int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
+                if ((ai.flags & mask) == 0 && ! currAppName.equals("StayFocused")) {
+                    nonSystemAppList.add(currAppName);
                 }
-                else if (!currAppName.equals("StayFocused")){
-                    systemApps.add(currAppName);
-                    System.out.println("YOUNG JUST ADDED"+currAppName);
+                else if (! currAppName.equals("StayFocused")){
+                    systemAppList.add(currAppName);
                 }
+                System.out.println("YOUNG JUST ADDED"+currAppName);
+
             }
             customPrefs.saveList(CustomSharedPreferences.APPNAMES_KEY, appNames);
             customPrefs.saveList(CustomSharedPreferences.SYSTEMAPPS_KEY, systemApps);
