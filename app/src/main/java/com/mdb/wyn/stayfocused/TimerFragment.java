@@ -41,7 +41,7 @@ public class TimerFragment extends Fragment implements TimerInterface {
         timeSetTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.createDialogAndSetTime();
+                activity.createDialogAndSetTime(0);
             }
         });
     }
@@ -72,7 +72,7 @@ public class TimerFragment extends Fragment implements TimerInterface {
             @Override
             public void onClick(View v) {
                 if (!activity.timeLeft.isZero()) {
-                    activity.handleStartButton();
+                    activity.handleStartButton("timer");
                     giveUpButton.setVisibility(TextView.VISIBLE);
                     startButton.setVisibility(TextView.GONE);
                 }

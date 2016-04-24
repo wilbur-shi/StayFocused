@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Toast;
+
 
 
 import java.util.ArrayList;
@@ -55,6 +57,7 @@ public class AppListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (showSystemApps.getText()=="Show System Apps"){
+                    Toast.makeText(getApplicationContext(), "Blacklisting system apps can lead to unpredictable results", Toast.LENGTH_LONG).show();
                     showSystemApps.setText("Hide System Apps");
                 }
                 else {

@@ -3,6 +3,7 @@ package com.mdb.wyn.stayfocused;
 
 
 import android.app.ActivityManager;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -23,28 +24,37 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
-    public Time timeLeft = new Time(0, 25, 0);
-    public CountDownTimer timer;
-    public boolean timerCreated = false;
+    public static Time timeLeft = new Time(0, 25, 0, "timer");
+    public Time startingTime= new Time(12,0,0,"alarm");
+    public Time endingTime= new Time(13, 0, 0, "alarm");
+    public static Time alarmTimeLeft= new Time(1,0,0,"timer");
+    public static CountDownTimer timer;
+    public static boolean timerCreated = false;
     private ViewPager viewPager;
-    private MyPagerAdapter adapter;
+    private static MyPagerAdapter adapter;
     private TabLayout tabLayout;
     public static boolean isBlockingOpen = false;
+    public static boolean timerIsRunning = false;
+    private static Context context;
+    private static ActivityManager activityManager;
     public static ArrayList<String> nonSystemAppList;
     public static ArrayList<String> systemAppList;
     public static Set<String> blackList;
-    public boolean timerIsRunning = false;
+//    public boolean timerIsRunning = false;
     public static CustomSharedPreferences customPrefs;
-
     BroadcastReceiver closeAppBroadcastReceiver;
 
     @Override
@@ -54,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        context = getApplicationContext();
+        activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 
         setupTabs();
 
@@ -104,7 +116,16 @@ public class MainActivity extends AppCompatActivity {
             createAppList();
         }
 
+        registerReceiver(alarmReceiver, new IntentFilter("start_alarm"));
     }
+    BroadcastReceiver alarmReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals("start_alarm")) {
+                handleStartButton("alarm");
+            }
+        }
+    };
 
     private void setupTabs() {
         TextView tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
@@ -123,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setCustomView(tabThree));
 
     }
-
+//STATIC?
     private void createTimer(long ms) {
         timerIsRunning = true;
         updateBlackList();
@@ -145,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish() {
                 timeLeft.addSecond(-1);
                 updateFragmentTextViews();
-                Toast.makeText(getApplicationContext(), "Time is up", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Time is up", Toast.LENGTH_SHORT).show();
                 timerIsRunning = false;
             }
         };
@@ -153,12 +174,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateBlackList() {
         blackList = customPrefs.getSet(CustomSharedPreferences.BLACKLIST_KEY);
-//        blackList = new ArrayList<>();
-//        if (blacklistnames != null) {
-//            for (String name : blacklistnames) {
-//                blackList.add(name);
-//            }
-//        }
         try {
             SettingsFragment frag = (SettingsFragment) adapter.getCurrentFragment();
             frag.changeData(blackList);
@@ -167,11 +182,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+//    STATIC?
     private void checkForTasks() {
         final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
 
-        PackageManager pm2= getApplicationContext().getPackageManager();
+        PackageManager pm2= context.getPackageManager();
         for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
             try {
 //                System.out.println("TRY CATCH STATEMENT");
@@ -179,8 +195,8 @@ public class MainActivity extends AppCompatActivity {
                 if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && blackList.contains(appName)) {
                     System.out.println("LOOK HERE"+ appName);
 
-                    Intent blockingIntent= new Intent(getApplicationContext(),BlockingActivity.class);
-                    PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 1, blockingIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    Intent blockingIntent= new Intent(context,BlockingActivity.class);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, blockingIntent, PendingIntent.FLAG_CANCEL_CURRENT);
                     System.out.println("GOT TO PENDINGINTENT");
                     try {
                         // Perform the operation associated with our pendingIntent
@@ -210,28 +226,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateFragmentTextViews() {
+//STATIC?
         try {
-            TimerInterface timerFragment = (TimerInterface) adapter.getCurrentFragment();
-            timerFragment.updateTimeTextView();
+            TimerInterface Fragment = (TimerInterface) adapter.getCurrentFragment();
+            Fragment.updateTimeTextView();
         } catch (ClassCastException cce) {
             System.out.println("Wrong stufff");
         }
     }
 
-    public void setTimeSet(int hours, int minutes) {
-        timeLeft = new Time(hours, minutes, 0);
+    public void setTimeSet(int hours, int minutes, int mode) {
+        if (mode==0){
+        timeLeft = new Time(hours, minutes, 0, "timer");}
+        else if (mode==1){
+            startingTime= new Time(hours,minutes,0,"alarm");
+        }
+        else if (mode==2){
+            endingTime= new Time(hours,minutes,0,"alarm");
+        }
+
         updateFragmentTextViews();
     }
 
-    public void createDialogAndSetTime() {
+    public void createDialogAndSetTime(int mode) {
 //        TimePicker timePicker = new TimePicker(getApplicationContext());
-        DialogFragment newFragment = new TimerPickerFragment();
+        TimerPickerFragment newFragment = new TimerPickerFragment();
+        newFragment.setMode(mode);
         newFragment.show(getSupportFragmentManager(), "timerPicker");
     }
 
-    public void handleStartButton() {
-        if (!timerCreated && !timeLeft.isZero()) {
+//    STATIC??
+    public void handleStartButton(String type) {
+        if (type.equals("timer")&& !timerCreated && !timeLeft.isZero()) {
             createTimer(timeLeft.totalTimeInMs());
+            timer.start();
+            timerCreated = true;
+        }
+        else if (type.equals("alarm")&& !timerCreated && !alarmTimeLeft.isZero()) {
+            createTimer(alarmTimeLeft.totalTimeInMs());
             timer.start();
             timerCreated = true;
         }
@@ -307,6 +339,24 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("unregistered receiver");
         }
         //else if the timer is not running yet, do not reset the timer
+
+    }
+
+    public void scheduleAlarm() {
+
+        Intent startingIntent = new Intent(this, AlarmReceiver.class);
+        startingIntent.putExtra("requestcode",1);
+        Intent endingIntent= new Intent(this, AlarmReceiver.class);
+        endingIntent.putExtra("requestcode",2);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        //start alarm stuff
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP,TimerPickerFragment.startingCalendar.getTimeInMillis(), PendingIntent.getBroadcast(this,1,  startingIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        Toast.makeText(this, "Starting Alarm Scheduled", Toast.LENGTH_LONG).show();
+
+        //end alarm stuff
+        alarmManager.set(AlarmManager.RTC_WAKEUP,TimerPickerFragment.endingCalendar.getTimeInMillis(), PendingIntent.getBroadcast(this,2,  endingIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        Toast.makeText(this, "Ending Alarm Scheduled", Toast.LENGTH_LONG).show();
 
     }
 }

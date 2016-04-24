@@ -7,11 +7,13 @@ public class Time {
     private int hour;
     private int minute;
     private int second;
+    private String type;
 
-    public Time(int h, int m, int s) {
+    public Time(int h, int m, int s, String t) {
         hour = h;
         minute = m;
         second = s;
+        type= t;
     }
 
     public static long minutesToMs(double min) {
@@ -75,6 +77,19 @@ public class Time {
     }
 
     public String toString() {
-        return String.format("%02d:%02d:%02d", hour, minute, second);
+        if (type.equals("timer")){
+            return String.format("%02d:%02d:%02d", hour, minute, second);
+        }
+        if (hour>12){
+        return String.format("%02d:%02d", hour-12, minute) + "PM";}
+        else if (hour==12){
+            return String.format("%02d:%02d", hour, minute) + "PM";
+        }
+        else if (hour==0)
+            return String.format("%02d:%02d", 12, minute)+ "AM";
+        else {
+            return String.format("%02d:%02d", hour, minute) + "AM";
+        }
+
     }
 }
