@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
-        android:titleTextColor="#FFFF"
+        android:titleTextColor="#FFFFFF"
         android:elevation="6dp"
         android:layout_alignParentTop="true"
         android:minHeight="?attr/actionBarSize"
@@ -38,7 +38,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Notifications Blocking"
+        android:text="Silence Notifications"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#000000"
         android:id="@+id/notificationsblocking"
