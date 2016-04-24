@@ -245,13 +245,15 @@ public class MainActivity extends AppCompatActivity {
             for (PackageInfo pi : list) {
                 ApplicationInfo ai = pm.getApplicationInfo(pi.packageName, 0);
                 String currAppName = pm.getApplicationLabel(ai).toString();
-                if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 0 && ! currAppName.equals("StayFocused")) {
+                int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
+                if ((ai.flags & mask) == 0 && ! currAppName.equals("StayFocused")) {
                     nonSystemAppList.add(currAppName);
                 }
                 else if (! currAppName.equals("StayFocused")){
                     systemAppList.add(currAppName);
-                    System.out.println("YOUNG JUST ADDED"+currAppName);
                 }
+                System.out.println("YOUNG JUST ADDED"+currAppName);
+
             }
         } catch (PackageManager.NameNotFoundException e) {
             System.out.println("Error: " + e);

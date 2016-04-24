@@ -44,15 +44,20 @@ public class AppListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (showSystemApps.getText()=="Show System Apps"){
-                    Toast.makeText(getApplicationContext(), "Blacklisting system apps can lead to unpredictable results", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Blacklisting system apps can lead to unpredictable results.", Toast.LENGTH_LONG).show();
                     showSystemApps.setText("Hide System Apps");
+                    for (String appName : MainActivity.systemAppList) {
+                        appListItems.add(new AppListItem(appName, false));
+                    }
                 }
                 else {
                     showSystemApps.setText("Show System Apps");
+                    for (String appName : MainActivity.systemAppList) {
+                        //find way to remove
+//                        appListItems.remove(new AppListItem(appName, false));
+                    }
                 }
-                for (String appName : MainActivity.systemAppList) {
-                    appListItems.add(new AppListItem(appName, false));
-                }
+
             }
         });
     }

@@ -30,12 +30,12 @@ public class SettingsFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.settingsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
 
-        ArrayList<AppListItem> stuff = new ArrayList<>();
-        for (String appName : MainActivity.blackList) {
-            stuff.add(new AppListItem(appName, false));
-        }
+//        ArrayList<AppListItem> stuff = new ArrayList<>();
+//        for (String appName : MainActivity.blackList) {
+//            stuff.add(new AppListItem(appName, false));
+//        }
         // TODO: Figure out shared preferences and all as well as select all
-        recyclerView.setAdapter(new BlackListAdapter(activity, stuff));
+//        recyclerView.setAdapter(new BlackListAdapter(activity, stuff));
 
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
