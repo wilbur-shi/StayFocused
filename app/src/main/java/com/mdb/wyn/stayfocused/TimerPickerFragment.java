@@ -21,6 +21,7 @@ public class TimerPickerFragment extends DialogFragment
     private int mode;
     public static Calendar startingCalendar= Calendar.getInstance();
     public static Calendar endingCalendar= Calendar.getInstance();
+    public MainActivity context;
 
     public void setMode(int num) {
         mode = num;
@@ -29,6 +30,7 @@ public class TimerPickerFragment extends DialogFragment
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        context = (MainActivity) getActivity();
         if (mode==0) {
             return new TimePickerDialog(getActivity(), this, 0, 0, true);
         }
@@ -37,12 +39,11 @@ public class TimerPickerFragment extends DialogFragment
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         // Do something with the time chosen by the user
-        System.out.println("ran nigga" +hourOfDay + " " + mode);
+        System.out.println("ran nigga" + hourOfDay + " " + mode);
         if (mode==1){
             startingCalendar= Calendar.getInstance();
             startingCalendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
             startingCalendar.set(Calendar.MINUTE, minute);
-
 
         }
         else if (mode==2){
@@ -54,20 +55,20 @@ public class TimerPickerFragment extends DialogFragment
         if (startingCalendar.getTimeInMillis()< System.currentTimeMillis() || endingCalendar.getTimeInMillis()< System.currentTimeMillis()){
             startingCalendar.roll(Calendar.DATE,1);
         endingCalendar.roll(Calendar.DATE,1);}
-        TimerPickerFragment.calculatealarmtimeleft();
+        calculatealarmtimeleft();
 
-        ((MainActivity)getActivity()).setTimeSet(hourOfDay, minute, mode);
+        context.setTimeSet(hourOfDay, minute, mode);
 
-
-//        ((TimerActivity)getActivity()).setTimeSet(hourOfDay, minute);
-    }
+        }
 
 
+ private void calculatealarmtimeleft() {
+//    int hours= endingCalendar.HOUR_OF_DAY-startingCalendar.HOUR_OF_DAY;
+//    int min= endingCalendar.MINUTE-startingCalendar.MINUTE;
 
+     int hours = context.endingTime.getHour() - context.startingTime.getHour();
+     int min = context.endingTime.getMinute() - context.startingTime.getMinute();
 
- private static void calculatealarmtimeleft() {
-    int hours= endingCalendar.HOUR_OF_DAY-startingCalendar.HOUR_OF_DAY;
-    int min= endingCalendar.MINUTE-startingCalendar.MINUTE;
      if (min<0){
          hours= hours-1;
          min=min+60;
@@ -75,7 +76,7 @@ public class TimerPickerFragment extends DialogFragment
      System.out.println("Hours " + hours);
      System.out.println("Minutes " + min);
 
-     if (hours<0 || hours==0 && min<=0){
+     if (hours<0 || (hours==0 && min<=0)){
          MainActivity.alarmTimeLeft= new Time(0,0,0,"timer");
               }
      else{MainActivity.alarmTimeLeft= new Time(hours,min,0,"timer");

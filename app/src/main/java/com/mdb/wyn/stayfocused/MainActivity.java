@@ -21,6 +21,7 @@ import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -31,8 +32,10 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     public static Time timeLeft = new Time(0, 25, 0, "timer");
@@ -44,14 +47,16 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private static MyPagerAdapter adapter;
     private TabLayout tabLayout;
+    public boolean isAlarmMode = false;
     public static boolean isBlockingOpen = false;
     public static boolean timerIsRunning = false;
-    private static Context context;
+    private Context context;
     private static ActivityManager activityManager;
     public static ArrayList<String> nonSystemAppList;
     public static ArrayList<String> systemAppList;
-    public static ArrayList<String> blackList;
-    public CustomSharedPreferences customPrefs;
+    public static Set<String> blackList;
+//    public boolean timerIsRunning = false;
+    public static CustomSharedPreferences customPrefs;
     BroadcastReceiver closeAppBroadcastReceiver;
 
     @Override
@@ -76,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+//                if (tab.getPosition() == 3) {
+//                    SettingsFragment settings = (SettingsFragment) adapter.getCurrentFragment();
+//                    settings.changeData();
+//                }
             }
 
             @Override
@@ -104,7 +113,22 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         customPrefs = new CustomSharedPreferences(prefs);
+
+        if (customPrefs.getSet(CustomSharedPreferences.APPNAMES_KEY) == null) {
+            createAppList();
+        }
+
+        registerReceiver(alarmReceiver, new IntentFilter("start_alarm"));
     }
+    BroadcastReceiver alarmReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals("start_alarm")) {
+                handleStartButton("alarm");
+                System.out.println("got to reeive, is going to start alarm button");
+            }
+        }
+    };
 
     private void setupTabs() {
         TextView tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
@@ -123,9 +147,10 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setCustomView(tabThree));
 
     }
-
-    private static void createTimer(long ms) {
+//STATIC?
+    private void createTimer(long ms) {
         timerIsRunning = true;
+        updateBlackList();
         timer = new CountDownTimer(ms, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -133,7 +158,11 @@ public class MainActivity extends AppCompatActivity {
                 if (minLeft <= 5) {
                     //Toast.makeText(getApplicationContext(), String.format("%d min left", minLeft), Toast.LENGTH_SHORT).show();
                 }
-                timeLeft.addSecond(-1);
+                if (isAlarmMode) {
+                    alarmTimeLeft.addSecond(-1);
+                } else {
+                    timeLeft.addSecond(-1);
+                }
                 // Checks running tasks, core functionality
                 if (!isBlockingOpen) {
                     checkForTasks();
@@ -150,7 +179,19 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
-    private static void checkForTasks() {
+    public void updateBlackList() {
+        blackList = customPrefs.getSet(CustomSharedPreferences.BLACKLIST_KEY);
+        try {
+            SettingsFragment frag = (SettingsFragment) adapter.getCurrentFragment();
+            frag.changeData(blackList);
+        } catch (ClassCastException e){
+            System.out.println("weird error not on settings fragment");
+        }
+    }
+
+//    STATIC?
+    private void checkForTasks() {
+        final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
 
         PackageManager pm2= context.getPackageManager();
@@ -158,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
             try {
 //                System.out.println("TRY CATCH STATEMENT");
                 CharSequence appName = pm2.getApplicationLabel(pm2.getApplicationInfo(appProcess.processName, PackageManager.GET_META_DATA));
-                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && nonSystemAppList.contains(appName)) {
+                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && blackList.contains(appName)) {
                     System.out.println("LOOK HERE"+ appName);
 
                     Intent blockingIntent= new Intent(context,BlockingActivity.class);
@@ -182,7 +223,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private static void updateFragmentTextViews() {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0 && resultCode == RESULT_OK) {
+            System.out.println("got to settings frag on activityresult");
+            updateBlackList();
+        }
+
+    }
+
+    private void updateFragmentTextViews() {
+//STATIC?
         try {
             TimerInterface Fragment = (TimerInterface) adapter.getCurrentFragment();
             Fragment.updateTimeTextView();
@@ -211,7 +262,8 @@ public class MainActivity extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(), "timerPicker");
     }
 
-    public static void handleStartButton(String type) {
+//    STATIC??
+    public void handleStartButton(String type) {
         if (type.equals("timer")&& !timerCreated && !timeLeft.isZero()) {
             createTimer(timeLeft.totalTimeInMs());
             timer.start();
@@ -219,6 +271,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else if (type.equals("alarm")&& !timerCreated && !alarmTimeLeft.isZero()) {
             createTimer(alarmTimeLeft.totalTimeInMs());
+            isAlarmMode = true;
             timer.start();
             timerCreated = true;
         }
@@ -236,10 +289,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void createBlackList() {
+    public void createAppList() {
         System.out.println("GOT TO METHOD");
-        nonSystemAppList = new ArrayList<>();
-        systemAppList = new ArrayList<>();
+//        nonSystemAppList = new ArrayList<>();
+//        systemAppList = new ArrayList<>();
+        HashSet<String> appNames = new HashSet<>();
+        HashSet<String> systemApps = new HashSet<>();
         PackageManager pm = getApplicationContext().getPackageManager();
         List<PackageInfo> list = pm.getInstalledPackages(0);
         try {
@@ -256,6 +311,9 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("YOUNG JUST ADDED"+currAppName);
 
             }
+            customPrefs.saveList(CustomSharedPreferences.APPNAMES_KEY, appNames);
+            customPrefs.saveList(CustomSharedPreferences.SYSTEMAPPS_KEY, systemApps);
+//            updateBlackList();
         } catch (PackageManager.NameNotFoundException e) {
             System.out.println("Error: " + e);
         }
@@ -286,6 +344,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
             System.exit(0);
         }
+        unregisterReceiver(alarmReceiver);
         if (closeAppBroadcastReceiver != null) {
             unregisterReceiver(closeAppBroadcastReceiver);
             System.out.println("unregistered receiver");

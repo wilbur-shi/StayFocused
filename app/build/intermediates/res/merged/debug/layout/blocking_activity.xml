@@ -3,35 +3,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Back to Work"
-        android:textSize="25dp"
+        android:textSize="20sp"
         android:textColor="@color/colorPrimaryDark"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
+        android:id="@+id/backToWork"
+        android:layout_alignTop="@+id/giveUp"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="50dp"
-        android:id="@+id/backToWork"/>
-    <TextView
+        android:layout_marginLeft="10dp"/>
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Give Up"
-        android:textSize="25dp"
+        android:textSize="20sp"
         android:textColor="@color/red"
+        android:layout_marginBottom="32dp"
+        android:layout_marginRight="10dp"
+        style="?android:attr/borderlessButtonStyle"
+        android:id="@+id/giveUp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="50dp"
-        android:id="@+id/giveUp"/>
+        android:layout_alignParentRight="true"/>
     <View
         android:layout_width="350dp"
         android:layout_height="1dp"
         android:layout_above="@+id/giveUp"
         android:layout_marginBottom="20dp"
         android:layout_centerHorizontal="true"
-        android:background="@android:color/black"/>
+        android:background="@android:color/black"
+        android:id="@+id/view2" />
 
 
 

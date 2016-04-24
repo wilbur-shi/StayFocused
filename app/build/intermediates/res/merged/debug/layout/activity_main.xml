@@ -19,10 +19,11 @@
         <!--android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
         <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>-->
 
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/custom_tab_layout_height"
         android:layout_alignParentBottom="true"
         android:background="?attr/colorPrimary"
         android:elevation="6dp"
@@ -30,34 +31,21 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-        <android.support.design.widget.TabItem
-            android:text="Timer"
-<<<<<<< HEAD
-            android:layout_height="24dp"
-            android:layout_width="wrap_content"
-            android:icon="@drawable/ic_av_timer_24dp"/>
-        <android.support.design.widget.TabItem
-            android:text="Alarm"
-            android:layout_height="24dp"
-=======
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            />
-        <android.support.design.widget.TabItem
-            android:text="Alarm"
-            android:layout_height="wrap_content"
->>>>>>> e27b3caf06c69e7dc57b1c3cc59a851e2a597a84
-            android:layout_width="wrap_content"
-            android:icon="@drawable/ic_watch_later_black_24dp"/>
-        <android.support.design.widget.TabItem
-            android:text="Settings"
-<<<<<<< HEAD
-            android:layout_height="24dp"
-=======
-            android:layout_height="wrap_content"
->>>>>>> e27b3caf06c69e7dc57b1c3cc59a851e2a597a84
-            android:layout_width="wrap_content"
-            android:icon="@drawable/ic_settings_black_24dp"/>
+        <!--<android.support.design.widget.TabItem-->
+            <!--android:text="Timer"-->
+            <!--android:layout_height="24dp"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:icon="@drawable/ic_av_timer_24dp"/>-->
+        <!--<android.support.design.widget.TabItem-->
+            <!--android:text="Alarm"-->
+            <!--android:layout_height="24dp"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:icon="@drawable/ic_watch_later_black_24dp"/>-->
+        <!--<android.support.design.widget.TabItem-->
+            <!--android:text="Settings"-->
+            <!--android:layout_height="24dp"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:icon="@drawable/ic_settings_black_24dp"/>-->
 
     </android.support.design.widget.TabLayout>
 
