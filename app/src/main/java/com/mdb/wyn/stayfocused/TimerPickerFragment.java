@@ -54,7 +54,7 @@ public class TimerPickerFragment extends DialogFragment
         }
         if (startingCalendar.getTimeInMillis()< System.currentTimeMillis() || endingCalendar.getTimeInMillis()< System.currentTimeMillis()){
             startingCalendar.roll(Calendar.DATE,1);
-        endingCalendar.roll(Calendar.DATE,1);}
+            endingCalendar.roll(Calendar.DATE,1);}
         calculatealarmtimeleft();
 
         context.setTimeSet(hourOfDay, minute, mode);

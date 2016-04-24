@@ -27,6 +27,8 @@ public class AlarmFragment extends Fragment implements TimerInterface{
     private TextView endingTextView;
     private TextView timeSetTextView;
     private Button setButton;
+    private Button cancelButton;
+    private Button giveUpButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,6 +38,9 @@ public class AlarmFragment extends Fragment implements TimerInterface{
         endingTextView = (TextView) view.findViewById(R.id.endingTimeText);
         timeSetTextView= (TextView) view.findViewById(R.id.timeSetTextView);
         setButton = (Button) view.findViewById(R.id.setButton);
+        cancelButton= (Button) view.findViewById(R.id.cancelButton);
+        giveUpButton= (Button) view.findViewById(R.id.giveUpButton);
+
         TimerPickerFragment.startingCalendar.set(Calendar.HOUR_OF_DAY,12);
         TimerPickerFragment.startingCalendar.set(Calendar.MINUTE,0);
 
@@ -68,16 +73,29 @@ public class AlarmFragment extends Fragment implements TimerInterface{
         setButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (!activity.alarmTimeLeft.equals(new Time(0,0,0,"timer"))) {
+                if (!activity.alarmTimeLeft.isZero()) {
                     activity.scheduleAlarm();
-//                }
+                    cancelButton.setVisibility(View.VISIBLE);
+                    setButton.setVisibility(View.GONE);
+
+                }
             }
 
 
         });
+        cancelButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                activity.handleGiveUpButton("alarm");
+
+            }
+        });
     }
     @Override
-    public void resetTextViews() {
+    public void resetButtons() {
+        cancelButton.setVisibility(View.GONE);
+        setButton.setVisibility(View.VISIBLE);
         updateTimeTextView();
     }
     @Override

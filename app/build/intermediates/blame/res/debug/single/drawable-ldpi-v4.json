@@ -8,6 +8,10 @@
         "source": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\generated\\res\\pngs\\debug\\drawable-ldpi\\ic_add_black_24dp.png"
     },
     {
+        "merged": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi-v4\\ic_thumb_down_24dp.png",
+        "source": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\generated\\res\\pngs\\debug\\drawable-ldpi\\ic_thumb_down_24dp.png"
+    },
+    {
         "merged": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi-v4\\ic_alarm_24dp.png",
         "source": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\generated\\res\\pngs\\debug\\drawable-ldpi\\ic_alarm_24dp.png"
     },

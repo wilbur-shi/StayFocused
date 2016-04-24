@@ -12,12 +12,12 @@
         "source": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.0\\res\\drawable-mdpi-v4\\abc_list_longpressed_holo.9.png"
     },
     {
-        "merged": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\abc_list_selector_disabled_holo_light.9.png",
-        "source": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.0\\res\\drawable-mdpi-v4\\abc_list_selector_disabled_holo_light.9.png"
-    },
-    {
         "merged": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\abc_switch_track_mtrl_alpha.9.png",
         "source": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.0\\res\\drawable-mdpi-v4\\abc_switch_track_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\abc_list_selector_disabled_holo_light.9.png",
+        "source": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.0\\res\\drawable-mdpi-v4\\abc_list_selector_disabled_holo_light.9.png"
     },
     {
         "merged": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_settings_black_24dp.png",
@@ -54,6 +54,10 @@
     {
         "merged": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\abc_tab_indicator_mtrl_alpha.9.png",
         "source": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.0\\res\\drawable-mdpi-v4\\abc_tab_indicator_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_thumb_down_24dp.png",
+        "source": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\generated\\res\\pngs\\debug\\drawable-mdpi\\ic_thumb_down_24dp.png"
     },
     {
         "merged": "C:\\Users\\Young\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\abc_spinner_mtrl_am_alpha.9.png",

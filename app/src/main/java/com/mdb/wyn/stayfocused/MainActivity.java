@@ -20,20 +20,14 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.view.Window;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
 
@@ -114,9 +108,9 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         customPrefs = new CustomSharedPreferences(prefs);
 
-        if (customPrefs.getSet(CustomSharedPreferences.APPNAMES_KEY) == null) {
-            createAppList();
-        }
+//        if (customPrefs.getSet(CustomSharedPreferences.APPNAMES_KEY) == null) {
+//            createAppList();
+//        }
 
         registerReceiver(alarmReceiver, new IntentFilter("start_alarm"));
     }
@@ -277,15 +271,27 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void handleGiveUpButton() {
-        timer.cancel();
-        timeLeft.reset();
+    public void handleGiveUpButton(String type) {
         timerCreated = false;
-        try {
-            TimerInterface timerFragment = (TimerInterface) adapter.getCurrentFragment();
-            timerFragment.resetTextViews();
-        } catch (ClassCastException cce) {
-            System.out.println("Wrong stufff");
+        if (type.equals("timer")) {
+            timer.cancel();
+            timeLeft.reset();
+            try {
+                TimerInterface timerFragment = (TimerInterface) adapter.getCurrentFragment();
+                timerFragment.resetButtons();
+            } catch (ClassCastException cce) {
+                System.out.println("Wrong stufff");
+            }
+        }
+        else{
+            alarmTimeLeft.reset();
+            try {
+                TimerInterface alarmFragment = (TimerInterface) adapter.getCurrentFragment();
+                alarmFragment.resetButtons();
+            } catch (ClassCastException cce) {
+                System.out.println("Wrong stufff");
+            }
+
         }
     }
 
@@ -323,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
 //        check if the timer is already running here
         super.onDestroy();
-        if (!timeLeft.isZero() && !timerIsRunning){
+        if (!timeLeft.isZero() && timerIsRunning){
             new AlertDialog.Builder(MainActivity.this)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setTitle("Are you sure?")
@@ -331,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            handleGiveUpButton();
+                            handleGiveUpButton("fix this later");
                             finish();
                             System.exit(0);
                         }

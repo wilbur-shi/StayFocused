@@ -5,5 +5,5 @@ package com.mdb.wyn.stayfocused;
  */
 public interface TimerInterface {
     void updateTimeTextView();
-    void resetTextViews();
+    void resetButtons();
 }

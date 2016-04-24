@@ -32,7 +32,7 @@ public class TimerFragment extends Fragment implements TimerInterface {
         setGiveUpButton();
         setStartButton();
         setTimeSetTextView();
-        resetTextViews();
+        resetButtons();
 
         return view;
     }
@@ -57,7 +57,7 @@ public class TimerFragment extends Fragment implements TimerInterface {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                activity.handleGiveUpButton();
+                                activity.handleGiveUpButton("timer");
                             }
                         })
                         .setNegativeButton("No", null)
@@ -81,7 +81,7 @@ public class TimerFragment extends Fragment implements TimerInterface {
     }
 
     @Override
-    public void resetTextViews() {
+    public void resetButtons() {
         giveUpButton.setVisibility(View.GONE);
         startButton.setVisibility(View.VISIBLE);
         updateTimeTextView();
