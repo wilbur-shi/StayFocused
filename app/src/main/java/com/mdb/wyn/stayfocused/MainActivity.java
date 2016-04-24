@@ -11,12 +11,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
@@ -43,23 +44,19 @@ public class MainActivity extends AppCompatActivity {
     private static MyPagerAdapter adapter;
     private TabLayout tabLayout;
     public static boolean isBlockingOpen = false;
-    public static ArrayList<String> nonSystemBlackList;
-    public static ArrayList<String> systemBlackList;
     public static boolean timerIsRunning = false;
     private static Context context;
     private static ActivityManager activityManager;
-
-
-
+    public static ArrayList<String> nonSystemAppList;
+    public static ArrayList<String> systemAppList;
+    public static ArrayList<String> blackList;
+    public CustomSharedPreferences customPrefs;
     BroadcastReceiver closeAppBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
-//
-//        setSupportActionBar(myToolbar);
 
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -104,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
         };
         registerReceiver(closeAppBroadcastReceiver, new IntentFilter("finish_activity"));
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        customPrefs = new CustomSharedPreferences(prefs);
     }
 
     private void setupTabs() {
@@ -158,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
             try {
 //                System.out.println("TRY CATCH STATEMENT");
                 CharSequence appName = pm2.getApplicationLabel(pm2.getApplicationInfo(appProcess.processName, PackageManager.GET_META_DATA));
-                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && nonSystemBlackList.contains(appName)) {
+                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && nonSystemAppList.contains(appName)) {
                     System.out.println("LOOK HERE"+ appName);
 
                     Intent blockingIntent= new Intent(context,BlockingActivity.class);
@@ -238,8 +237,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void createBlackList() {
         System.out.println("GOT TO METHOD");
-        nonSystemBlackList = new ArrayList<>();
-        systemBlackList= new ArrayList<>();
+        nonSystemAppList = new ArrayList<>();
+        systemAppList = new ArrayList<>();
         PackageManager pm = getApplicationContext().getPackageManager();
         List<PackageInfo> list = pm.getInstalledPackages(0);
         try {
@@ -247,10 +246,10 @@ public class MainActivity extends AppCompatActivity {
                 ApplicationInfo ai = pm.getApplicationInfo(pi.packageName, 0);
                 String currAppName = pm.getApplicationLabel(ai).toString();
                 if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 0 && ! currAppName.equals("StayFocused")) {
-                    nonSystemBlackList.add(currAppName);
+                    nonSystemAppList.add(currAppName);
                 }
                 else if (! currAppName.equals("StayFocused")){
-                    systemBlackList.add(currAppName);
+                    systemAppList.add(currAppName);
                     System.out.println("YOUNG JUST ADDED"+currAppName);
                 }
             }

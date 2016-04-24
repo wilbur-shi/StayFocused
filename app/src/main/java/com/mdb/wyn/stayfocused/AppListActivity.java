@@ -15,10 +15,10 @@ import java.util.ArrayList;
 /**
  * Created by Young on 4/2/2016.
  */
-public class BlackListActivity extends AppCompatActivity {
-    BlackListAdapter blackListAdapter;
+public class AppListActivity extends AppCompatActivity {
+    AppListAdapter appListAdapter;
     CheckBox selectAll;
-    ArrayList<BlackListItem> blackListItems;
+    ArrayList<AppListItem> appListItems;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,14 +28,14 @@ public class BlackListActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        blackListItems = new ArrayList<>();
+        appListItems = new ArrayList<>();
 
-        for (String appName : MainActivity.nonSystemBlackList) {
-            blackListItems.add(new BlackListItem(appName, false));
+        for (String appName : MainActivity.nonSystemAppList) {
+            appListItems.add(new AppListItem(appName, false));
         }
 
-        blackListAdapter = new BlackListAdapter(getApplicationContext(), blackListItems);
-        recyclerView.setAdapter(blackListAdapter);
+        appListAdapter = new AppListAdapter(getApplicationContext(), appListItems);
+        recyclerView.setAdapter(appListAdapter);
 
 
 //this is to add system apps after the pressing the Show System Apps button
@@ -50,8 +50,8 @@ public class BlackListActivity extends AppCompatActivity {
                 else {
                     showSystemApps.setText("Show System Apps");
                 }
-                for (String appName : MainActivity.systemBlackList) {
-                    blackListItems.add(new BlackListItem(appName, false));
+                for (String appName : MainActivity.systemAppList) {
+                    appListItems.add(new AppListItem(appName, false));
                 }
             }
         });
@@ -60,9 +60,9 @@ public class BlackListActivity extends AppCompatActivity {
     public void onCheckBoxClicked(View view) {
         //this is for the select all method
         boolean checked = ((CheckBox) view).isChecked();
-        for (BlackListItem eachItem: BlackListAdapter.blackListArray){
+        for (AppListItem eachItem: AppListAdapter.appListArray){
             eachItem.isBlacklisted= checked;
-            blackListAdapter.notifyDataSetChanged();
+            appListAdapter.notifyDataSetChanged();
         }
 
     }
