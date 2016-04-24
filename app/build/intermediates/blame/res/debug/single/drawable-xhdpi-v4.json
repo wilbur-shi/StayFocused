@@ -8,6 +8,10 @@
         "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\generated\\res\\pngs\\debug\\drawable-xhdpi\\ic_watch_later_black_24dp.png"
     },
     {
+        "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ic_thumb_down_24dp.png",
+        "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\generated\\res\\pngs\\debug\\drawable-xhdpi\\ic_thumb_down_24dp.png"
+    },
+    {
         "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\abc_menu_hardkey_panel_mtrl_mult.9.png",
         "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.0\\res\\drawable-xhdpi-v4\\abc_menu_hardkey_panel_mtrl_mult.9.png"
     },
@@ -34,6 +38,10 @@
     {
         "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\abc_textfield_default_mtrl_alpha.9.png",
         "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.0\\res\\drawable-xhdpi-v4\\abc_textfield_default_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ic_alarm_24dp.png",
+        "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\generated\\res\\pngs\\debug\\drawable-xhdpi\\ic_alarm_24dp.png"
     },
     {
         "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\abc_btn_rating_star_off_mtrl_alpha.png",
@@ -76,6 +84,10 @@
         "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.0\\res\\drawable-xhdpi-v4\\abc_list_pressed_holo_light.9.png"
     },
     {
+        "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\abc_list_divider_mtrl_alpha.9.png",
+        "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.0\\res\\drawable-xhdpi-v4\\abc_list_divider_mtrl_alpha.9.png"
+    },
+    {
         "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\abc_popup_background_mtrl_mult.9.png",
         "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.0\\res\\drawable-xhdpi-v4\\abc_popup_background_mtrl_mult.9.png"
     },
@@ -86,10 +98,6 @@
     {
         "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ic_add_circle_outline_black_24dp.png",
         "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\generated\\res\\pngs\\debug\\drawable-xhdpi\\ic_add_circle_outline_black_24dp.png"
-    },
-    {
-        "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\abc_list_divider_mtrl_alpha.9.png",
-        "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.0\\res\\drawable-xhdpi-v4\\abc_list_divider_mtrl_alpha.9.png"
     },
     {
         "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\abc_switch_track_mtrl_alpha.9.png",
