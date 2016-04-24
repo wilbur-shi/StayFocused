@@ -19,6 +19,7 @@ import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -26,7 +27,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     public Time timeLeft = new Time(0, 25, 0);
@@ -38,9 +41,9 @@ public class MainActivity extends AppCompatActivity {
     public static boolean isBlockingOpen = false;
     public static ArrayList<String> nonSystemAppList;
     public static ArrayList<String> systemAppList;
-    public static ArrayList<String> blackList;
+    public static Set<String> blackList;
     public boolean timerIsRunning = false;
-    public CustomSharedPreferences customPrefs;
+    public static CustomSharedPreferences customPrefs;
 
     BroadcastReceiver closeAppBroadcastReceiver;
 
@@ -64,6 +67,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+//                if (tab.getPosition() == 3) {
+//                    SettingsFragment settings = (SettingsFragment) adapter.getCurrentFragment();
+//                    settings.changeData();
+//                }
             }
 
             @Override
@@ -92,6 +99,11 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         customPrefs = new CustomSharedPreferences(prefs);
+
+        if (customPrefs.getSet(CustomSharedPreferences.APPNAMES_KEY) == null) {
+            createAppList();
+        }
+
     }
 
     private void setupTabs() {
@@ -114,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void createTimer(long ms) {
         timerIsRunning = true;
+        updateBlackList();
         timer = new CountDownTimer(ms, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -138,6 +151,22 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
+    public void updateBlackList() {
+        blackList = customPrefs.getSet(CustomSharedPreferences.BLACKLIST_KEY);
+//        blackList = new ArrayList<>();
+//        if (blacklistnames != null) {
+//            for (String name : blacklistnames) {
+//                blackList.add(name);
+//            }
+//        }
+        try {
+            SettingsFragment frag = (SettingsFragment) adapter.getCurrentFragment();
+            frag.changeData(blackList);
+        } catch (ClassCastException e){
+            System.out.println("weird error not on settings fragment");
+        }
+    }
+
     private void checkForTasks() {
         final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
@@ -147,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
             try {
 //                System.out.println("TRY CATCH STATEMENT");
                 CharSequence appName = pm2.getApplicationLabel(pm2.getApplicationInfo(appProcess.processName, PackageManager.GET_META_DATA));
-                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && nonSystemAppList.contains(appName)) {
+                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && blackList.contains(appName)) {
                     System.out.println("LOOK HERE"+ appName);
 
                     Intent blockingIntent= new Intent(getApplicationContext(),BlockingActivity.class);
@@ -169,6 +198,15 @@ public class MainActivity extends AppCompatActivity {
             catch (NullPointerException nullPointerException){
             }
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0 && resultCode == RESULT_OK) {
+            System.out.println("got to settings frag on activityresult");
+            updateBlackList();
+        }
+
     }
 
     private void updateFragmentTextViews() {
@@ -211,24 +249,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void createBlackList() {
+    public void createAppList() {
         System.out.println("GOT TO METHOD");
-        nonSystemAppList = new ArrayList<>();
-        systemAppList = new ArrayList<>();
+//        nonSystemAppList = new ArrayList<>();
+//        systemAppList = new ArrayList<>();
+        HashSet<String> appNames = new HashSet<>();
+        HashSet<String> systemApps = new HashSet<>();
         PackageManager pm = getApplicationContext().getPackageManager();
         List<PackageInfo> list = pm.getInstalledPackages(0);
         try {
             for (PackageInfo pi : list) {
                 ApplicationInfo ai = pm.getApplicationInfo(pi.packageName, 0);
                 String currAppName = pm.getApplicationLabel(ai).toString();
-                if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 0 && ! currAppName.equals("StayFocused")) {
-                    nonSystemAppList.add(currAppName);
+                if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 0 && !currAppName.equals("StayFocused")) {
+                    appNames.add(currAppName);
                 }
-                else if (! currAppName.equals("StayFocused")){
-                    systemAppList.add(currAppName);
+                else if (!currAppName.equals("StayFocused")){
+                    systemApps.add(currAppName);
                     System.out.println("YOUNG JUST ADDED"+currAppName);
                 }
             }
+            customPrefs.saveList(CustomSharedPreferences.APPNAMES_KEY, appNames);
+            customPrefs.saveList(CustomSharedPreferences.SYSTEMAPPS_KEY, systemApps);
+//            updateBlackList();
         } catch (PackageManager.NameNotFoundException e) {
             System.out.println("Error: " + e);
         }

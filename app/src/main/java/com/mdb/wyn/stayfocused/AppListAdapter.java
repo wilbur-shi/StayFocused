@@ -33,12 +33,15 @@ import java.util.ArrayList;
 
         @Override
         public void onBindViewHolder(CustomViewHolder holder, int position) {
-            AppListItem appListItem = appListArray.get(position);
+            final AppListItem appListItem = appListArray.get(position);
             holder.appNameTextView.setText(appListItem.appName);
-            holder.isBlacklistCheckBox.setChecked(false);
+            holder.isBlacklistCheckBox.setChecked(appListItem.isBlacklisted);
             holder.isBlacklistCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    appListItem.isBlacklisted = isChecked;
+//                    System.out.println("on check change listener");
+                    notifyDataSetChanged();
                     //result of changing the checkbox
                     //dunno if need to notify datasetchanged
                 }
@@ -51,6 +54,10 @@ import java.util.ArrayList;
             return appListArray.size();
         }
 
+        public ArrayList<AppListItem> getAppListArray() {
+            return appListArray;
+        }
+
         class CustomViewHolder extends RecyclerView.ViewHolder {
             TextView appNameTextView;
             CheckBox isBlacklistCheckBox;
@@ -59,17 +66,6 @@ import java.util.ArrayList;
                 super(view);
                 this.appNameTextView = (TextView) view.findViewById(R.id.appNameTextView);
                 this.isBlacklistCheckBox= (CheckBox) view.findViewById(R.id.isBlacklistCheckBox);
-
-
-//                view.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        int row= getAdapterPosition();
-//                        blackListArray.get(row).isBlacklisted= ! blackListArray.get(row).isBlacklisted;
-//
-//
-//                    }
-//                });
 
             }
         }
