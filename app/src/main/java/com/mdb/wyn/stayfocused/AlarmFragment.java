@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by Wilbur on 4/6/2016.
@@ -63,15 +64,13 @@ public class AlarmFragment extends Fragment implements TimerInterface{
                     setButton.setVisibility(View.GONE);
                 }
             }
-
-
         });
         cancelButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v) {
+                Toast.makeText(activity, "Alarm cancelled", Toast.LENGTH_LONG).show();
                 activity.handleCancelAlarm();
-
             }
         });
         giveUpButton.setOnClickListener(new View.OnClickListener() {

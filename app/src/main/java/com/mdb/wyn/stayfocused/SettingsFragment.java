@@ -42,6 +42,7 @@ public class SettingsFragment extends Fragment {
 
         aSwitch= (Switch) view.findViewById(R.id.switch1);
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 activity.silenceNotifications(isChecked);
             }

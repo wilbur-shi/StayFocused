@@ -53,27 +53,27 @@ public class AppListActivity extends AppCompatActivity {
 
 
 //this is to add system apps after the pressing the Show System Apps button
-        final Button showSystemApps= (Button) findViewById(R.id.systemApps);
-        showSystemApps.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (showSystemApps.getText()=="Show System Apps"){
-                    Toast.makeText(getApplicationContext(), "Blacklisting system apps can lead to unpredictable results.", Toast.LENGTH_LONG).show();
-                    showSystemApps.setText("Hide System Apps");
-                    for (String appName : MainActivity.systemAppList) {
-                        appListItems.add(new AppListItem(appName, false));
-                    }
-                }
-                else {
-                    showSystemApps.setText("Show System Apps");
-                    for (String appName : MainActivity.systemAppList) {
-                        //find way to remove
-//                        appListItems.remove(new AppListItem(appName, false));
-                    }
-                }
-
-            }
-        });
+//        final Button showSystemApps= (Button) findViewById(R.id.systemApps);
+//        showSystemApps.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (showSystemApps.getText()=="Show System Apps"){
+//                    Toast.makeText(getApplicationContext(), "Blacklisting system apps can lead to unpredictable results.", Toast.LENGTH_LONG).show();
+//                    showSystemApps.setText("Hide System Apps");
+//                    for (String appName : MainActivity.systemAppList) {
+//                        appListItems.add(new AppListItem(appName, false));
+//                    }
+//                }
+//                else {
+//                    showSystemApps.setText("Show System Apps");
+//                    for (String appName : MainActivity.systemAppList) {
+//                        //find way to remove
+////                        appListItems.remove(new AppListItem(appName, false));
+//                    }
+//                }
+//
+//            }
+//        });
     }
 
     private void setSelectAllCheckBox() {
@@ -98,8 +98,7 @@ public class AppListActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
+    public void saveChangeToBlacklist() {
         ArrayList<AppListItem> appListItems = appListAdapter.getAppListArray();
         System.out.println("on back pressed " + appListItems);
 //        Set<String> blacklist = prefs.getSet(CustomSharedPreferences.BLACKLIST_KEY);
@@ -118,6 +117,11 @@ public class AppListActivity extends AppCompatActivity {
         System.out.println("after saving, sharedprefs blacklist is " + prefs.getSet(CustomSharedPreferences.BLACKLIST_KEY));
         setResult(RESULT_OK);
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        saveChangeToBlacklist();
     }
 
 }

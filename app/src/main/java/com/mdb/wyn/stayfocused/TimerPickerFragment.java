@@ -12,6 +12,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Wilbur on 4/2/2016.
@@ -34,30 +35,36 @@ public class TimerPickerFragment extends DialogFragment
         context = (MainActivity) getActivity();
         startingCalendar = context.startingCalendar;
         endingCalendar = context.endingCalendar;
+        Calendar rightNow = Calendar.getInstance();
         if (mode==0) {
-            return new TimePickerDialog(getActivity(), this, context.startingTime.getHour(), context.startingTime.getMinute(), true);
+            return new TimePickerDialog(getActivity(), this, context.timeLeft.getHour(), context.timeLeft.getMinute(), true);
+        } else if (mode == 1) {
+            return new TimePickerDialog(getActivity(), this, context.startingTime.getHour(), context.startingTime.getMinute(), false);
+
+        } else {
+            return new TimePickerDialog(getActivity(), this, context.endingTime.getHour(), context.endingTime.getMinute(), false);
         }
-        return new TimePickerDialog(getActivity(), this, context.endingTime.getHour(), context.endingTime.getMinute(), false);
     }
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         // Do something with the time chosen by the user
         System.out.println("ran nigga" + hourOfDay + " " + mode);
-
+        Calendar rightNow = Calendar.getInstance();
         if (mode==1){
 //            startingCalendar= Calendar.getInstance();
             startingCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             startingCalendar.set(Calendar.MINUTE, minute);
 //            Toast.makeText(context, "Scheduled alarm successfully, will begin at " + startingCalendar.getTime(), Toast.LENGTH_LONG).show();
-            if (startingCalendar.getTimeInMillis()< System.currentTimeMillis()){
+            if (startingCalendar.getTimeInMillis() < rightNow.getTimeInMillis()){
             startingCalendar.add(Calendar.DATE, 1);}
         }
         else if (mode==2){
 //            endingCalendar= Calendar.getInstance();
             endingCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             endingCalendar.set(Calendar.MINUTE, minute);
-//            Toast.makeText(context, "calendar vs system: " +  endingCalendar.getTimeInMillis() + ", " + System.currentTimeMillis(), Toast.LENGTH_LONG).show();
-            if (endingCalendar.getTimeInMillis()< System.currentTimeMillis()){
+//            Toast.makeText(context, "calendar vs system: " + endingCalendar.getTime() + ", " + new Date(rightNow.getTimeInMillis()), Toast.LENGTH_LONG).show();
+            System.out.println("first the toast");
+            if (endingCalendar.getTimeInMillis() < rightNow.getTimeInMillis()){
             endingCalendar.add(Calendar.DATE, 1);}
         }
         context.setTimeSet(hourOfDay, minute, mode);

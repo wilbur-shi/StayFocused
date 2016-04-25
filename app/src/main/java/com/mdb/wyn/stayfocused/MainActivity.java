@@ -16,6 +16,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
@@ -34,7 +35,7 @@ import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
-    public static Time timeLeft = new Time(0, 25, 0, "timer");
+    public Time timeLeft = new Time(0, 25, 0, "timer");
     public Time startingTime= new Time(12,0,0,"alarm");
     public Time endingTime= new Time(13, 0, 0, "alarm");
     public static Time alarmTimeLeft= new Time(1,0,0,"timer");
@@ -210,10 +211,22 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onFinish() {
-                timeLeft.addSecond(-1);
+                if (isAlarmMode) {
+                    alarmTimeLeft.reset();
+                } else {
+                    timeLeft.reset();
+                }
                 updateFragmentTextViews();
                 Toast.makeText(context, "Congratulations, you finished your work! Yay!", Toast.LENGTH_SHORT).show();
+                MediaPlayer mMediaPlayer = MediaPlayer.create(context, R.raw.tada_sound);
+                for (int i = 0; i < 5; i++) {
+                    mMediaPlayer.start();
+
+                }
+                // TODO: Show some notification or something and play a congratulatory noise
                 timerIsRunning = false;
+                setupTimes();
+                resetFragmentButtons();
             }
         };
     }
@@ -282,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setTimeSet(int hours, int minutes, int mode) {
+        System.out.println("then the settimeset");
         if (mode==0){
         timeLeft = new Time(hours, minutes, 0, "timer");}
         else if (mode==1){
@@ -356,10 +370,10 @@ public class MainActivity extends AppCompatActivity {
                 ApplicationInfo ai = pm.getApplicationInfo(pi.packageName, 0);
                 String currAppName = pm.getApplicationLabel(ai).toString();
                 int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
-                if ((ai.flags & mask) == 0 && ! currAppName.equals("StayFocused")) {
+                if ((ai.flags & mask) == 0 && ! currAppName.equals("Kimojo")) {
                     appNames.add(currAppName);
                 }
-                else if (! currAppName.equals("StayFocused")){
+                else if (! currAppName.equals("Kimojo")){
                     systemApps.add(currAppName);
                 }
 //                System.out.println("YOUNG JUST ADDED"+currAppName);
@@ -392,7 +406,6 @@ public class MainActivity extends AppCompatActivity {
                     })
                     .setNegativeButton("No", null)
                     .show();
-
         }
         else{
             finish();
@@ -441,7 +454,9 @@ public class MainActivity extends AppCompatActivity {
     public void silenceNotifications(boolean isChecked) {
         final AudioManager mode = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
         int ringerMode = mode.getRingerMode();
-        customPrefs.setRinger(ringerMode);
+        if (ringerMode != AudioManager.RINGER_MODE_SILENT) {
+            customPrefs.setRinger(ringerMode);
+        }
         if (isChecked) {
             mode.setRingerMode(AudioManager.RINGER_MODE_SILENT);
         } else {
