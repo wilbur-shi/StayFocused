@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     public static boolean isAlarmMode = false;
     public static boolean isBlockingOpen = false;
-    public static boolean timerIsRunning = false;
+    public boolean timerIsRunning = false;
     private Context context;
     private ActivityManager activityManager;
 
@@ -99,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        viewPager.setCurrentItem(3);
+
         closeAppBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -118,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
 //        if (customPrefs.getSet(CustomSharedPreferences.APPNAMES_KEY) == null) {
         createAppList();
         setupCalendar();
-
 //        }
 
         registerReceiver(alarmReceiver, new IntentFilter("start_alarm"));
@@ -249,14 +250,17 @@ public class MainActivity extends AppCompatActivity {
         PackageManager pm2= context.getPackageManager();
         for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
             try {
-//                System.out.println("TRY CATCH STATEMENT");
+                System.out.println("TRY CATCH STATEMENT");
                 CharSequence appName = pm2.getApplicationLabel(pm2.getApplicationInfo(appProcess.processName, PackageManager.GET_META_DATA));
-                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && blackList.contains(appName) && customPrefs.getCheckedPref(appName.toString())) {
-//                    System.out.println("LOOK HERE"+ appName);
+                if (!appName.equals("Kimojo")) {
+                    System.out.println(blackList + " also the pref for appname is: " + customPrefs.getCheckedPref(appName.toString()));
+                }
+                if (!appName.equals("Kimojo") && appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && blackList.contains(appName) && customPrefs.getCheckedPref(appName.toString())) {
+                    System.out.println("LOOK HERE"+ appName);
 
-                    Intent blockingIntent= new Intent(context,BlockingActivity.class);
+                    Intent blockingIntent= new Intent(context, BlockingActivity.class);
                     PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, blockingIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-//                    System.out.println("GOT TO PENDINGINTENT");
+                    System.out.println("GOT TO PENDINGINTENT");
                     try {
                         // Perform the operation associated with our pendingIntent
                         pendingIntent.send();

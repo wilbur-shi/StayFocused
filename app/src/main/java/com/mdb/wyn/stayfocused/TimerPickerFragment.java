@@ -8,6 +8,9 @@ import android.support.v4.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -24,6 +27,7 @@ public class TimerPickerFragment extends DialogFragment
     private Calendar startingCalendar;
     private Calendar endingCalendar;
     public MainActivity context;
+    public TimePickerDialog picker;
 
     public void setMode(int num) {
         mode = num;
@@ -37,17 +41,25 @@ public class TimerPickerFragment extends DialogFragment
         endingCalendar = context.endingCalendar;
         Calendar rightNow = Calendar.getInstance();
         if (mode==0) {
-            return new TimePickerDialog(getActivity(), this, context.timeLeft.getHour(), context.timeLeft.getMinute(), true);
+            picker = new TimePickerDialog(getActivity(), this, context.timeLeft.getHour(), context.timeLeft.getMinute(), true);
         } else if (mode == 1) {
-            return new TimePickerDialog(getActivity(), this, context.startingTime.getHour(), context.startingTime.getMinute(), false);
+            picker = new TimePickerDialog(getActivity(), this, context.startingTime.getHour(), context.startingTime.getMinute(), false);
 
         } else {
-            return new TimePickerDialog(getActivity(), this, context.endingTime.getHour(), context.endingTime.getMinute(), false);
+            picker = new TimePickerDialog(getActivity(), this, context.endingTime.getHour(), context.endingTime.getMinute(), false);
         }
+        TextView tv = new TextView(context);
+        tv.setTextSize(22);
+        tv.setPadding(20, 15, 15, 15);
+        tv.setText("Set Time");
+        picker.setCustomTitle(tv);
+        return picker;
     }
 
+    @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         // Do something with the time chosen by the user
+//        picker.setTitle("Set Time");
         System.out.println("ran nigga" + hourOfDay + " " + mode);
         Calendar rightNow = Calendar.getInstance();
         if (mode==1){

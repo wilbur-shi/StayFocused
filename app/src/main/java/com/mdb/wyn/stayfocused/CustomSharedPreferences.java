@@ -42,6 +42,7 @@ public class CustomSharedPreferences {
         editor.putStringSet(key, list);
         for (String name : list) {
             editor.putBoolean(name, true);
+            System.out.println("put in some true stuff");
         }
         editor.apply();
     }
@@ -71,6 +72,7 @@ public class CustomSharedPreferences {
     }
 
     public boolean getCheckedPref(String appName) {
+        System.out.println("in getcheckpref, does it contain the appname?" + appName + " " + mSharedPrefs.contains(appName));
         return mSharedPrefs.getBoolean(appName, false);
     }
 }

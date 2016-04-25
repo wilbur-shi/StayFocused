@@ -70,16 +70,17 @@ public class SettingsFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("GOT TO ONCLICK");
+//                System.out.println("GOT TO ONCLICK");
                 Intent blacklistIntent = new Intent(activity.getApplicationContext(), AppListActivity.class);
                 activity.startActivityForResult(blacklistIntent, 0);
-                System.out.println("GOT TO INTENT");
+//                System.out.println("GOT TO INTENT");
             }
         });
         return view;
     }
 
     public void setBlackListItems(Set<String> list) {
+//        System.out.println("got to setblacklistitems");
         ArrayList<AppListItem> blacklistArray = new ArrayList<>();
         if (list != null && !list.isEmpty()) {
             youHaveNoBlackListWarningTextView.setVisibility(View.GONE);
@@ -93,6 +94,7 @@ public class SettingsFragment extends Fragment {
     }
 
     public void changeData(Set<String> list) {
+//        System.out.println("got to chahgedata");
         setBlackListItems(list);
         mBlackListAdapter.notifyDataSetChanged();
     }

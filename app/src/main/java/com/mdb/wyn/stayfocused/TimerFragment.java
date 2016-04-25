@@ -41,7 +41,9 @@ public class TimerFragment extends Fragment implements TimerInterface {
         timeSetTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.createDialogAndSetTime(0);
+                if (!activity.timerIsRunning) {
+                    activity.createDialogAndSetTime(0);
+                }
             }
         });
     }

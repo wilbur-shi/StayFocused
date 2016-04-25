@@ -84,7 +84,7 @@ public class AlarmFragment extends Fragment implements TimerInterface{
 
     @Override
     public void resetButtons() {
-        if (MainActivity.isAlarmMode && MainActivity.timerIsRunning) {
+        if (activity.isAlarmMode && activity.timerIsRunning) {
             giveUpButton.setVisibility(View.VISIBLE);
             cancelButton.setVisibility(View.GONE);
             setButton.setVisibility(View.GONE);

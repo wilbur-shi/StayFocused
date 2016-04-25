@@ -24,6 +24,7 @@ import java.util.Set;
 public class AppListActivity extends AppCompatActivity {
     AppListAdapter appListAdapter;
     CheckBox selectAll;
+    Button saveBlackListButton;
     ArrayList<AppListItem> appListItems;
     CustomSharedPreferences prefs;
 
@@ -50,6 +51,14 @@ public class AppListActivity extends AppCompatActivity {
         }
         appListAdapter = new AppListAdapter(getApplicationContext(), appListItems);
         recyclerView.setAdapter(appListAdapter);
+
+        saveBlackListButton = (Button) findViewById(R.id.saveBlacklist);
+        saveBlackListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveChangeToBlacklist();
+            }
+        });
 
 
 //this is to add system apps after the pressing the Show System Apps button
@@ -100,7 +109,7 @@ public class AppListActivity extends AppCompatActivity {
 
     public void saveChangeToBlacklist() {
         ArrayList<AppListItem> appListItems = appListAdapter.getAppListArray();
-        System.out.println("on back pressed " + appListItems);
+//        System.out.println("on back pressed " + appListItems);
 //        Set<String> blacklist = prefs.getSet(CustomSharedPreferences.BLACKLIST_KEY);
 //        if (blacklist == null) {
         Set<String> blacklist = new HashSet<>();
@@ -112,9 +121,9 @@ public class AppListActivity extends AppCompatActivity {
                 prefs.removeFromBlackList(item.appName);
             }
         }
-        System.out.println("before shared prefs, local blacklist is " + blacklist);
+//        System.out.println("before shared prefs, local blacklist is " + blacklist);
         prefs.saveList(CustomSharedPreferences.BLACKLIST_KEY, blacklist);
-        System.out.println("after saving, sharedprefs blacklist is " + prefs.getSet(CustomSharedPreferences.BLACKLIST_KEY));
+//        System.out.println("after saving, sharedprefs blacklist is " + prefs.getSet(CustomSharedPreferences.BLACKLIST_KEY));
         setResult(RESULT_OK);
         finish();
     }
