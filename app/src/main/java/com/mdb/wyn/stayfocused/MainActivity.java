@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
@@ -26,6 +27,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,11 +43,19 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private static MyPagerAdapter adapter;
     private TabLayout tabLayout;
-    public boolean isAlarmMode = false;
+    public static boolean isAlarmMode = false;
     public static boolean isBlockingOpen = false;
     public static boolean timerIsRunning = false;
     private Context context;
-    private static ActivityManager activityManager;
+    private ActivityManager activityManager;
+
+    // Alarm stuff variables
+    private AlarmManager alarmManager;
+    private PendingIntent start;
+    private PendingIntent end;
+    public Calendar startingCalendar = Calendar.getInstance();
+    public Calendar endingCalendar = Calendar.getInstance();
+
     public static ArrayList<String> nonSystemAppList;
     public static ArrayList<String> systemAppList;
     public static Set<String> blackList;
@@ -105,6 +116,8 @@ public class MainActivity extends AppCompatActivity {
 
 //        if (customPrefs.getSet(CustomSharedPreferences.APPNAMES_KEY) == null) {
         createAppList();
+        setupCalendar();
+
 //        }
 
         registerReceiver(alarmReceiver, new IntentFilter("start_alarm"));
@@ -118,6 +131,22 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
+    private void setupTimes() {
+        timeLeft = new Time(0, 25, 0, "timer");
+        startingTime= new Time(12,0,0,"alarm");
+        endingTime= new Time(13, 0, 0, "alarm");
+        alarmTimeLeft= new Time(1,0,0,"timer");
+    }
+
+    private void setupCalendar() {
+
+        startingCalendar.set(Calendar.HOUR_OF_DAY,12);
+        startingCalendar.set(Calendar.MINUTE,0);
+
+        endingCalendar.set(Calendar.HOUR_OF_DAY,13);
+        endingCalendar.set(Calendar.MINUTE,0);
+    }
 
     private void setupTabs() {
         TextView tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
@@ -276,23 +305,36 @@ public class MainActivity extends AppCompatActivity {
 
 //    STATIC??
     public void handleStartButton(String type) {
-        if (type.equals("timer")&& !timerCreated && !timeLeft.isZero()) {
+        if (type.equals("timer")&& !timerCreated && !timeLeft.isZero() && !isAlarmMode) {
             createTimer(timeLeft.totalTimeInMs());
             timer.start();
             timerCreated = true;
         }
         else if (type.equals("alarm")&& !timerCreated && !alarmTimeLeft.isZero()) {
             createTimer(alarmTimeLeft.totalTimeInMs());
+            Toast.makeText(this, "Starting Alarm", Toast.LENGTH_LONG).show();
             isAlarmMode = true;
             timer.start();
             timerCreated = true;
+            resetFragmentButtons();
         }
     }
 
-    public void handleGiveUpButton() {
-        timer.cancel();
-        timeLeft.reset();
+    public void handleGiveUpButton(String type) {
         timerCreated = false;
+        timer.cancel();
+        timerIsRunning = false;
+        setupTimes();
+//        if (type.equals("timer")) {
+//            timeLeft.reset();
+//        }
+//        else{
+//            alarmTimeLeft.reset();
+//        }
+        resetFragmentButtons();
+    }
+
+    private void resetFragmentButtons() {
         try {
             TimerInterface timerFragment = (TimerInterface) adapter.getCurrentFragment();
             timerFragment.resetButtons();
@@ -335,7 +377,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
 //        check if the timer is already running here
         super.onDestroy();
-        if (!timeLeft.isZero() && !timerIsRunning){
+        if (!timeLeft.isZero() && timerIsRunning){
             new AlertDialog.Builder(MainActivity.this)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setTitle("Are you sure?")
@@ -343,7 +385,7 @@ public class MainActivity extends AppCompatActivity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            handleGiveUpButton();
+                            handleGiveUpButton("fix this later");
                             finish();
                             System.exit(0);
                         }
@@ -371,15 +413,42 @@ public class MainActivity extends AppCompatActivity {
         startingIntent.putExtra("requestcode",1);
         Intent endingIntent= new Intent(this, AlarmReceiver.class);
         endingIntent.putExtra("requestcode",2);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         //start alarm stuff
-
-        alarmManager.set(AlarmManager.RTC_WAKEUP,TimerPickerFragment.startingCalendar.getTimeInMillis(), PendingIntent.getBroadcast(this,1,  startingIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-        Toast.makeText(this, "Starting Alarm Scheduled", Toast.LENGTH_LONG).show();
+        start = PendingIntent.getBroadcast(this,1,  startingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        long startTime = Time.minutesToMs(Time.msToMinutes(startingCalendar.getTimeInMillis()));
+        long endTime = Time.minutesToMs(Time.msToMinutes(endingCalendar.getTimeInMillis()));
+        Date date = new Date(startTime);
+        Date endDate = new Date(endTime);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, startTime, start);
+        Toast.makeText(this, "Scheduled alarm successfully, will begin at " + date, Toast.LENGTH_LONG).show();
 
         //end alarm stuff
-        alarmManager.set(AlarmManager.RTC_WAKEUP,TimerPickerFragment.endingCalendar.getTimeInMillis(), PendingIntent.getBroadcast(this,2,  endingIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-        Toast.makeText(this, "Ending Alarm Scheduled", Toast.LENGTH_LONG).show();
+        end = PendingIntent.getBroadcast(this, 2, endingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, endTime, end);
+        Toast.makeText(this, "Alarm will end at " + endDate, Toast.LENGTH_LONG).show();
+
+    }
+
+    public void handleCancelAlarm() {
+        if (start != null && end != null) {
+            alarmManager.cancel(start);
+            alarmManager.cancel(end);
+        }
+        resetFragmentButtons();
+    }
+
+    public void silenceNotifications(boolean isChecked) {
+        final AudioManager mode = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+        int ringerMode = mode.getRingerMode();
+        customPrefs.setRinger(ringerMode);
+        if (isChecked) {
+            mode.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+        } else {
+            mode.setRingerMode(customPrefs.getRingerMode());
+        }
+        //save this shit to sharedprefs
+
 
     }
 }

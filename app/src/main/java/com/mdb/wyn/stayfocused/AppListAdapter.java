@@ -33,21 +33,27 @@ import java.util.ArrayList;
 
         @Override
         public void onBindViewHolder(CustomViewHolder holder, int position) {
-            final int pos = position;
-            final AppListItem appListItem = appListArray.get(pos);
+            final AppListItem appListItem = appListArray.get(position);
+//            final CustomViewHolder viewHolder = holder;
             holder.appNameTextView.setText(appListItem.appName);
+            holder.isBlacklistCheckBox.setOnCheckedChangeListener(null);
             holder.isBlacklistCheckBox.setChecked(appListItem.isBlacklisted);
-            holder.isBlacklistCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    appListItem.isBlacklisted = isChecked;
-                    notifyItemChanged(pos);
-//                    System.out.println("on check change listener");
-//                    notifyDataSetChanged();
-                    //result of changing the checkbox
-                    //dunno if need to notify datasetchanged
-                }
-            });
+            holder.isBlacklistCheckBox.setOnCheckedChangeListener(new CheckBoxChangeListener(position));
+
+        }
+
+        private class CheckBoxChangeListener implements CompoundButton.OnCheckedChangeListener {
+            private int position;
+
+            public CheckBoxChangeListener(int pos) {
+                position = pos;
+            }
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                appListArray.get(position).isBlacklisted = isChecked;
+                notifyDataSetChanged();
+            }
 
         }
 

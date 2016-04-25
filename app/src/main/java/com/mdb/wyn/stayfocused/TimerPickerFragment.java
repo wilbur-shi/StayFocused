@@ -9,6 +9,7 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -19,8 +20,8 @@ public class TimerPickerFragment extends DialogFragment
         implements TimePickerDialog.OnTimeSetListener {
 
     private int mode;
-    public static Calendar startingCalendar= Calendar.getInstance();
-    public static Calendar endingCalendar= Calendar.getInstance();
+    private Calendar startingCalendar;
+    private Calendar endingCalendar;
     public MainActivity context;
 
     public void setMode(int num) {
@@ -31,35 +32,34 @@ public class TimerPickerFragment extends DialogFragment
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         context = (MainActivity) getActivity();
+        startingCalendar = context.startingCalendar;
+        endingCalendar = context.endingCalendar;
         if (mode==0) {
-            return new TimePickerDialog(getActivity(), this, 0, 0, true);
+            return new TimePickerDialog(getActivity(), this, context.startingTime.getHour(), context.startingTime.getMinute(), true);
         }
-        return new TimePickerDialog(getActivity(), this, 0, 0, false);
+        return new TimePickerDialog(getActivity(), this, context.endingTime.getHour(), context.endingTime.getMinute(), false);
     }
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         // Do something with the time chosen by the user
         System.out.println("ran nigga" + hourOfDay + " " + mode);
-        if (mode == 0) {
-            context.setTimeSet(hourOfDay, minute, mode);
-        }
+
         if (mode==1){
-            startingCalendar= Calendar.getInstance();
+//            startingCalendar= Calendar.getInstance();
             startingCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             startingCalendar.set(Calendar.MINUTE, minute);
+//            Toast.makeText(context, "Scheduled alarm successfully, will begin at " + startingCalendar.getTime(), Toast.LENGTH_LONG).show();
             if (startingCalendar.getTimeInMillis()< System.currentTimeMillis()){
-            startingCalendar.roll(Calendar.DATE,1);}
-            context.setTimeSet(hourOfDay, minute, mode);
-
+            startingCalendar.add(Calendar.DATE, 1);}
         }
         else if (mode==2){
-            endingCalendar= Calendar.getInstance();
+//            endingCalendar= Calendar.getInstance();
             endingCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            endingCalendar.set(Calendar.MINUTE,minute);
+            endingCalendar.set(Calendar.MINUTE, minute);
+//            Toast.makeText(context, "calendar vs system: " +  endingCalendar.getTimeInMillis() + ", " + System.currentTimeMillis(), Toast.LENGTH_LONG).show();
             if (endingCalendar.getTimeInMillis()< System.currentTimeMillis()){
-            endingCalendar.roll(Calendar.DATE,1);}
-            context.setTimeSet(hourOfDay, minute, mode);
-//            context.calculateAlarmTimeLeft();
+            endingCalendar.add(Calendar.DATE, 1);}
         }
+        context.setTimeSet(hourOfDay, minute, mode);
     }
 }

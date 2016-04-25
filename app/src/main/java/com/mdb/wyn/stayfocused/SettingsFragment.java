@@ -11,6 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import java.util.Set;
  */
 public class SettingsFragment extends Fragment {
     private MainActivity activity;
+    Switch aSwitch;
     private FloatingActionButton fab;
     private CustomSharedPreferences prefs;
     private ArrayList<AppListItem> blacklistItems;
@@ -36,6 +39,13 @@ public class SettingsFragment extends Fragment {
         toolbar.setTitleTextColor(Color.WHITE);
 
         youHaveNoBlackListWarningTextView = (TextView) view.findViewById(R.id.optionalTextView);
+
+        aSwitch= (Switch) view.findViewById(R.id.switch1);
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                activity.silenceNotifications(isChecked);
+            }
+        });
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.settingsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
