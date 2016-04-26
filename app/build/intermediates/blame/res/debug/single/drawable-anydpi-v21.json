@@ -1,5 +1,9 @@
 [
     {
+        "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21\\ic_block_24dp.xml",
+        "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\generated\\res\\pngs\\debug\\drawable-anydpi-v21\\ic_block_24dp.xml"
+    },
+    {
         "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21\\ic_add_circle_outline_black_24dp.xml",
         "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\generated\\res\\pngs\\debug\\drawable-anydpi-v21\\ic_add_circle_outline_black_24dp.xml"
     },
@@ -8,12 +12,12 @@
         "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\generated\\res\\pngs\\debug\\drawable-anydpi-v21\\ic_settings_black_24dp.xml"
     },
     {
-        "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21\\ic_alarm_24dp.xml",
-        "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\generated\\res\\pngs\\debug\\drawable-anydpi-v21\\ic_alarm_24dp.xml"
-    },
-    {
         "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21\\ic_av_timer_24dp.xml",
         "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\generated\\res\\pngs\\debug\\drawable-anydpi-v21\\ic_av_timer_24dp.xml"
+    },
+    {
+        "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21\\ic_alarm_24dp.xml",
+        "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\generated\\res\\pngs\\debug\\drawable-anydpi-v21\\ic_alarm_24dp.xml"
     },
     {
         "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21\\ic_watch_later_black_24dp.xml",

@@ -64,10 +64,6 @@
         "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\src\\main\\res\\layout\\blacklist_row_view.xml"
     },
     {
-        "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\layout\\row_view.xml",
-        "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\src\\main\\res\\layout\\row_view.xml"
-    },
-    {
         "merged": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_search_dropdown_item_icons_2line.xml",
         "source": "C:\\Users\\Wilbur\\AndroidStudioProjects\\StayFocused\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.0\\res\\layout\\abc_search_dropdown_item_icons_2line.xml"
     },

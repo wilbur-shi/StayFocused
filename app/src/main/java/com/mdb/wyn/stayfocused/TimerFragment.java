@@ -52,17 +52,17 @@ public class TimerFragment extends Fragment implements TimerInterface {
         giveUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(activity)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Reset values")
-                        .setMessage("Are you sure you want to reset values?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                new AlertDialog.Builder(activity, R.style.MyAlertDialogStyle)
+                        .setIcon(R.drawable.ic_block_24dp)
+                        .setTitle("RESET ALL VALUES")
+                        .setMessage("Are you sure you want to give up?")
+                        .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 activity.handleGiveUpButton("timer");
                             }
                         })
-                        .setNegativeButton("No", null)
+                        .setPositiveButton("No", null)
                         .show();
                 // TODO: Failed stuff, you gave up
             }

@@ -42,7 +42,7 @@ public class CustomSharedPreferences {
         editor.putStringSet(key, list);
         for (String name : list) {
             editor.putBoolean(name, true);
-            System.out.println("put in some true stuff");
+//            System.out.println("put in some true stuff");
         }
         editor.apply();
     }

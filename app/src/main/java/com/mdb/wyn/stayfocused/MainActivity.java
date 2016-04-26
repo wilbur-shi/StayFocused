@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -35,10 +36,10 @@ import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
-    public Time timeLeft = new Time(0, 25, 0, "timer");
-    public Time startingTime= new Time(12,0,0,"alarm");
-    public Time endingTime= new Time(13, 0, 0, "alarm");
-    public static Time alarmTimeLeft= new Time(1,0,0,"timer");
+    public Time timeLeft;
+    public Time startingTime;
+    public Time endingTime;
+    public static Time alarmTimeLeft;
     public static CountDownTimer timer;
     public static boolean timerCreated = false;
     private ViewPager viewPager;
@@ -57,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
     public Calendar startingCalendar = Calendar.getInstance();
     public Calendar endingCalendar = Calendar.getInstance();
 
-    public static ArrayList<String> nonSystemAppList;
-    public static ArrayList<String> systemAppList;
+    public static ArrayList<AppListItem> nonSystemAppList;
+    public static ArrayList<AppListItem> systemAppList;
     public static Set<String> blackList;
 //    public boolean timerIsRunning = false;
     public static CustomSharedPreferences customPrefs;
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         context = getApplicationContext();
         activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 
+        setupTimes();
         setupTabs();
 
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -135,19 +137,21 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void setupTimes() {
+        final Calendar rightNow = Calendar.getInstance();
         timeLeft = new Time(0, 25, 0, "timer");
-        startingTime= new Time(12,0,0,"alarm");
-        endingTime= new Time(13, 0, 0, "alarm");
+        System.out.println(rightNow.get(Calendar.HOUR_OF_DAY) + " and " + rightNow.get(Calendar.MINUTE));
+        startingTime= new Time(rightNow.get(Calendar.HOUR_OF_DAY), rightNow.get(Calendar.MINUTE),0,"alarm");
+        endingTime= new Time(rightNow.get(Calendar.HOUR_OF_DAY) + 1, rightNow.get(Calendar.MINUTE), 0, "alarm");
         alarmTimeLeft= new Time(1,0,0,"timer");
     }
 
     private void setupCalendar() {
 
-        startingCalendar.set(Calendar.HOUR_OF_DAY,12);
-        startingCalendar.set(Calendar.MINUTE,0);
+        startingCalendar.set(Calendar.HOUR_OF_DAY, 12);
+        startingCalendar.set(Calendar.MINUTE, 0);
 
-        endingCalendar.set(Calendar.HOUR_OF_DAY,13);
-        endingCalendar.set(Calendar.MINUTE,0);
+        endingCalendar.set(Calendar.HOUR_OF_DAY, 13);
+        endingCalendar.set(Calendar.MINUTE, 0);
     }
 
     private void setupTabs() {
@@ -275,6 +279,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
             catch (NullPointerException nullPointerException){
+                System.out.println("not detecting stuff");
             }
         }
     }
@@ -369,13 +374,17 @@ public class MainActivity extends AppCompatActivity {
         HashSet<String> systemApps = new HashSet<>();
         PackageManager pm = getApplicationContext().getPackageManager();
         List<PackageInfo> list = pm.getInstalledPackages(0);
+        nonSystemAppList = new ArrayList<>();
         try {
             for (PackageInfo pi : list) {
                 ApplicationInfo ai = pm.getApplicationInfo(pi.packageName, 0);
                 String currAppName = pm.getApplicationLabel(ai).toString();
+                Drawable icon = pm.getApplicationIcon(ai);
                 int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
                 if ((ai.flags & mask) == 0 && ! currAppName.equals("Kimojo")) {
+//                    System.out.println(icon==null);
                     appNames.add(currAppName);
+                    nonSystemAppList.add(new AppListItem(currAppName, false, icon));
                 }
                 else if (! currAppName.equals("Kimojo")){
                     systemApps.add(currAppName);
@@ -396,11 +405,11 @@ public class MainActivity extends AppCompatActivity {
 //        check if the timer is already running here
         super.onDestroy();
         if (!timeLeft.isZero() && timerIsRunning){
-            new AlertDialog.Builder(MainActivity.this)
+            new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setTitle("Are you sure?")
                     .setMessage("Closing the app will reset the timer.")
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             handleGiveUpButton("fix this later");
@@ -408,7 +417,7 @@ public class MainActivity extends AppCompatActivity {
                             System.exit(0);
                         }
                     })
-                    .setNegativeButton("No", null)
+                    .setPositiveButton("No", null)
                     .show();
         }
         else{

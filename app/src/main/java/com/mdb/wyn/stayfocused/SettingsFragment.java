@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,7 @@ import java.util.Set;
  */
 public class SettingsFragment extends Fragment {
     private MainActivity activity;
-    Switch aSwitch;
+    SwitchCompat aSwitch;
     private FloatingActionButton fab;
     private CustomSharedPreferences prefs;
     private ArrayList<AppListItem> blacklistItems;
@@ -40,7 +41,7 @@ public class SettingsFragment extends Fragment {
 
         youHaveNoBlackListWarningTextView = (TextView) view.findViewById(R.id.optionalTextView);
 
-        aSwitch= (Switch) view.findViewById(R.id.switch1);
+        aSwitch= (SwitchCompat) view.findViewById(R.id.switch1);
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -52,7 +53,6 @@ public class SettingsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
 
         blacklistItems = new ArrayList<>();
-        blacklistItems.add(new AppListItem("test", true));
 
         mBlackListAdapter = new BlackListAdapter(activity, blacklistItems);
         setBlackListItems(MainActivity.customPrefs.getSet(CustomSharedPreferences.BLACKLIST_KEY));
@@ -85,7 +85,7 @@ public class SettingsFragment extends Fragment {
         if (list != null && !list.isEmpty()) {
             youHaveNoBlackListWarningTextView.setVisibility(View.GONE);
             for (String appName : list) {
-                blacklistArray.add(new AppListItem(appName, true));
+                blacklistArray.add(new AppListItem(appName, true, null));
             }
         } else {
             youHaveNoBlackListWarningTextView.setVisibility(View.VISIBLE);

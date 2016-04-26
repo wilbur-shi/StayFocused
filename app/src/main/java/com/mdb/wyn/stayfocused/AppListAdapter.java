@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
             final AppListItem appListItem = appListArray.get(position);
 //            final CustomViewHolder viewHolder = holder;
             holder.appNameTextView.setText(appListItem.appName);
+            holder.appIcon.setImageDrawable(appListItem.icon);
             holder.isBlacklistCheckBox.setOnCheckedChangeListener(null);
             holder.isBlacklistCheckBox.setChecked(appListItem.isBlacklisted);
             holder.isBlacklistCheckBox.setOnCheckedChangeListener(new CheckBoxChangeListener(position));
@@ -69,11 +71,13 @@ import java.util.ArrayList;
         class CustomViewHolder extends RecyclerView.ViewHolder {
             TextView appNameTextView;
             CheckBox isBlacklistCheckBox;
+            ImageView appIcon;
 
             public CustomViewHolder (View view) {
                 super(view);
                 this.appNameTextView = (TextView) view.findViewById(R.id.appNameTextView);
                 this.isBlacklistCheckBox= (CheckBox) view.findViewById(R.id.isBlacklistCheckBox);
+                this.appIcon = (ImageView) view.findViewById(R.id.iconImg);
 
             }
         }

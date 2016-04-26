@@ -29,7 +29,8 @@
         android:layout_below="@id/view"
         android:layout_marginTop="5dp"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="40dp"
+        android:layout_marginLeft="25dp"
+        android:textSize="20sp"
         android:text="Start time"
         android:textColor="@color/colorAccent" />
 
@@ -52,6 +53,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/endTimeText"
         android:text="End time"
+        android:textSize="20sp"
         android:layout_below="@id/startingTimeText"
         android:layout_marginTop="15dp"
         android:layout_alignLeft="@+id/startTimeText"

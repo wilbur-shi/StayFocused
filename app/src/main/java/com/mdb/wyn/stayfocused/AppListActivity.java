@@ -42,12 +42,13 @@ public class AppListActivity extends AppCompatActivity {
         prefs = MainActivity.customPrefs;
         Set<String> blacklist = prefs.getSet(CustomSharedPreferences.BLACKLIST_KEY);
         Set<String> applist = prefs.getSet(CustomSharedPreferences.APPNAMES_KEY);
-        for (String appName : applist) {
+        for (AppListItem item : MainActivity.nonSystemAppList) {
             boolean isChecked = false;
-            if (blacklist != null && blacklist.contains(appName)) {
+            if (blacklist != null && blacklist.contains(item.appName)) {
                 isChecked = true;
             }
-            appListItems.add(new AppListItem(appName, isChecked));
+//            System.out.println(item.icon==null);
+            appListItems.add(new AppListItem(item.appName, isChecked, item.icon));
         }
         appListAdapter = new AppListAdapter(getApplicationContext(), appListItems);
         recyclerView.setAdapter(appListAdapter);

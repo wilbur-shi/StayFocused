@@ -39,7 +39,6 @@ public class TimerPickerFragment extends DialogFragment
         context = (MainActivity) getActivity();
         startingCalendar = context.startingCalendar;
         endingCalendar = context.endingCalendar;
-        Calendar rightNow = Calendar.getInstance();
         if (mode==0) {
             picker = new TimePickerDialog(getActivity(), this, context.timeLeft.getHour(), context.timeLeft.getMinute(), true);
         } else if (mode == 1) {
@@ -49,8 +48,8 @@ public class TimerPickerFragment extends DialogFragment
             picker = new TimePickerDialog(getActivity(), this, context.endingTime.getHour(), context.endingTime.getMinute(), false);
         }
         TextView tv = new TextView(context);
-        tv.setTextSize(22);
-        tv.setPadding(20, 15, 15, 15);
+        tv.setTextSize(17);
+        tv.setPadding(40, 15, 15, 15);
         tv.setText("Set Time");
         picker.setCustomTitle(tv);
         return picker;
@@ -60,8 +59,8 @@ public class TimerPickerFragment extends DialogFragment
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         // Do something with the time chosen by the user
 //        picker.setTitle("Set Time");
-        System.out.println("ran nigga" + hourOfDay + " " + mode);
-        Calendar rightNow = Calendar.getInstance();
+//        System.out.println("ran nigga" + hourOfDay + " " + mode);
+        final Calendar rightNow = Calendar.getInstance();
         if (mode==1){
 //            startingCalendar= Calendar.getInstance();
             startingCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);

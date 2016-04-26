@@ -14,6 +14,8 @@ public class Time {
         minute = m;
         second = s;
         type= t;
+        if (type.equals("alarm") && hour > 23) { hour = 0; }
+
     }
 
     public static long minutesToMs(double min) {

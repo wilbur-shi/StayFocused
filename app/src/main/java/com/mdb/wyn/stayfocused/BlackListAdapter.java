@@ -69,12 +69,12 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.Cust
 
     class CustomViewHolder extends RecyclerView.ViewHolder {
         TextView blackListAppNameTextView;
-        Switch isActivated;
+        SwitchCompat isActivated;
 
         public CustomViewHolder (View view) {
             super(view);
             blackListAppNameTextView = (TextView) view.findViewById(R.id.blackListAppNameTextView);
-            isActivated= (Switch) view.findViewById(R.id.activationSwitch);
+            isActivated= (SwitchCompat) view.findViewById(R.id.activationSwitch);
         }
     }
 }

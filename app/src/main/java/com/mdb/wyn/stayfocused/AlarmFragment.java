@@ -1,5 +1,7 @@
 package com.mdb.wyn.stayfocused;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -52,6 +54,7 @@ public class AlarmFragment extends Fragment implements TimerInterface{
                 activity.createDialogAndSetTime(2);
             }
         });
+        updateTimeTextView();
     }
 
     private void createButtons() {
@@ -76,10 +79,20 @@ public class AlarmFragment extends Fragment implements TimerInterface{
         giveUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.handleGiveUpButton("alarm");
+                new AlertDialog.Builder(activity, R.style.MyAlertDialogStyle)
+                        .setIcon(R.drawable.ic_block_24dp)
+                        .setTitle("RESET ALL VALUES")
+                        .setMessage("Are you sure you want to give up?")
+                        .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                activity.handleGiveUpButton("alarm");
+                            }
+                        })
+                        .setPositiveButton("No", null)
+                        .show();
             }
         });
-
     }
 
     @Override
