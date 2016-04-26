@@ -60,14 +60,11 @@ public class TimerPickerFragment extends DialogFragment
         // Do something with the time chosen by the user
 //        picker.setTitle("Set Time");
 //        System.out.println("ran nigga" + hourOfDay + " " + mode);
-        final Calendar rightNow = Calendar.getInstance();
         if (mode==1){
 //            startingCalendar= Calendar.getInstance();
             startingCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             startingCalendar.set(Calendar.MINUTE, minute);
 //            Toast.makeText(context, "Scheduled alarm successfully, will begin at " + startingCalendar.getTime(), Toast.LENGTH_LONG).show();
-            if (startingCalendar.getTimeInMillis() < rightNow.getTimeInMillis()){
-            startingCalendar.add(Calendar.DATE, 1);}
         }
         else if (mode==2){
 //            endingCalendar= Calendar.getInstance();
@@ -75,8 +72,6 @@ public class TimerPickerFragment extends DialogFragment
             endingCalendar.set(Calendar.MINUTE, minute);
 //            Toast.makeText(context, "calendar vs system: " + endingCalendar.getTime() + ", " + new Date(rightNow.getTimeInMillis()), Toast.LENGTH_LONG).show();
             System.out.println("first the toast");
-            if (endingCalendar.getTimeInMillis() < rightNow.getTimeInMillis()){
-            endingCalendar.add(Calendar.DATE, 1);}
         }
         context.setTimeSet(hourOfDay, minute, mode);
     }

@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import android.support.v7.app.AppCompatActivity;
@@ -28,10 +29,13 @@ public class BlockingActivity extends AppCompatActivity{
         backToWork= (Button) findViewById(R.id.backToWork);
         giveUp= (Button) findViewById(R.id.giveUp);
 
+        final MediaPlayer mMediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.tada_sound);
+        mMediaPlayer.start();
         //back to the home page
         backToWork.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mMediaPlayer.stop();
                 Intent startMain = new Intent(Intent.ACTION_MAIN);
                 startMain.addCategory(Intent.CATEGORY_HOME);
                 startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

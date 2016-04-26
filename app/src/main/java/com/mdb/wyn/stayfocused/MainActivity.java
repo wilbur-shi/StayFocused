@@ -442,6 +442,13 @@ public class MainActivity extends AppCompatActivity {
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         //start alarm stuff
         start = PendingIntent.getBroadcast(this,1,  startingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        final Calendar rightNow = Calendar.getInstance();
+        if (startingCalendar.getTimeInMillis() < rightNow.getTimeInMillis()) {
+            startingCalendar.add(Calendar.DATE, 1);
+            endingCalendar.add(Calendar.DATE, 1);
+        }
+
         long startTime = Time.minutesToMs(Time.msToMinutes(startingCalendar.getTimeInMillis()));
         long endTime = Time.minutesToMs(Time.msToMinutes(endingCalendar.getTimeInMillis()));
         Date date = new Date(startTime);
