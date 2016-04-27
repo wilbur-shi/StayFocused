@@ -18,6 +18,11 @@ public class Time {
 
     }
 
+    public int totalTimeInSec() {
+        int y= (int) hour * 3600 + minute*60 + second;
+        return y;
+    }
+
     public static long minutesToMs(double min) {
         return (long) (min * 60000);
     }

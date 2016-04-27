@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.support.v7.app.AppCompatActivity;
@@ -29,13 +30,10 @@ public class BlockingActivity extends AppCompatActivity{
         backToWork= (Button) findViewById(R.id.backToWork);
         giveUp= (Button) findViewById(R.id.giveUp);
 
-        final MediaPlayer mMediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.tada_sound);
-        mMediaPlayer.start();
         //back to the home page
         backToWork.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mMediaPlayer.stop();
                 Intent startMain = new Intent(Intent.ACTION_MAIN);
                 startMain.addCategory(Intent.CATEGORY_HOME);
                 startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -48,21 +46,25 @@ public class BlockingActivity extends AppCompatActivity{
         giveUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(BlockingActivity.this)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Reset values")
-                        .setMessage("Are you sure you want to reset values?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                int style;
+                if (Build.VERSION.SDK_INT > 20) {
+                    style = R.style.MyAlertDialogStyle;
+                } else {
+                    style = 0;
+                }
+                new AlertDialog.Builder(BlockingActivity.this, style)
+                        .setIcon(R.drawable.ic_block_24dp)
+                        .setTitle("RESET ALL VALUES")
+                        .setMessage("Are you sure you want to give up?")
+                        .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                               sendBroadcastReceiver();finish();
+                                sendBroadcastReceiver();
+                                finish();
                             }
                         })
-                        .setNegativeButton("No", null)
+                        .setPositiveButton("No", null)
                         .show();
-                // TODO: Failed s
-                //reset the timer
-                //we have to decide what we want to do after this
             }
         });
     }

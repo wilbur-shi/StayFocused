@@ -5,6 +5,8 @@ package com.mdb.wyn.stayfocused;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,10 +20,12 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -64,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
 //    public boolean timerIsRunning = false;
     public static CustomSharedPreferences customPrefs;
     BroadcastReceiver closeAppBroadcastReceiver;
+
+    public int savedTimeLeftSec;
+    public int timeLeftSec;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
                 if (action.equals("finish_activity")) {
+                    handleGiveUpButton("timer");
                     finish();
                     System.out.println("received broadcast");
                     System.exit(0);
@@ -115,16 +123,14 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         registerReceiver(closeAppBroadcastReceiver, new IntentFilter("finish_activity"));
+        registerReceiver(alarmReceiver, new IntentFilter("start_alarm"));
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         customPrefs = new CustomSharedPreferences(prefs);
 
-//        if (customPrefs.getSet(CustomSharedPreferences.APPNAMES_KEY) == null) {
         createAppList();
-        setupCalendar();
-//        }
+        setCalendarsHourMinToTimes();
 
-        registerReceiver(alarmReceiver, new IntentFilter("start_alarm"));
     }
     BroadcastReceiver alarmReceiver = new BroadcastReceiver() {
         @Override
@@ -145,14 +151,6 @@ public class MainActivity extends AppCompatActivity {
         alarmTimeLeft= new Time(1,0,0,"timer");
     }
 
-    private void setupCalendar() {
-
-        startingCalendar.set(Calendar.HOUR_OF_DAY, 12);
-        startingCalendar.set(Calendar.MINUTE, 0);
-
-        endingCalendar.set(Calendar.HOUR_OF_DAY, 13);
-        endingCalendar.set(Calendar.MINUTE, 0);
-    }
 
     private void setupTabs() {
         TextView tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
@@ -196,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
     private void createTimer(long ms) {
         timerIsRunning = true;
         updateBlackList();
+        createTimerStartedNotification();
         timer = new CountDownTimer(ms, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -207,6 +206,9 @@ public class MainActivity extends AppCompatActivity {
                     alarmTimeLeft.addSecond(-1);
                 } else {
                     timeLeft.addSecond(-1);
+                    timeLeftSec=timeLeftSec-1;
+                    TimerFragment.mProgressStatus= 100*(savedTimeLeftSec-timeLeftSec)/savedTimeLeftSec;
+                    TimerFragment.progressBar.setProgress(TimerFragment.mProgressStatus);
                 }
                 // Checks running tasks, core functionality
                 if (!isBlockingOpen) {
@@ -232,7 +234,9 @@ public class MainActivity extends AppCompatActivity {
                 timerIsRunning = false;
                 setupTimes();
                 resetFragmentButtons();
+                cancelNotification(getApplicationContext(), 001);
             }
+
         };
     }
 
@@ -254,10 +258,10 @@ public class MainActivity extends AppCompatActivity {
         PackageManager pm2= context.getPackageManager();
         for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
             try {
-                System.out.println("TRY CATCH STATEMENT");
+//                System.out.println("TRY CATCH STATEMENT");
                 CharSequence appName = pm2.getApplicationLabel(pm2.getApplicationInfo(appProcess.processName, PackageManager.GET_META_DATA));
                 if (!appName.equals("Kimojo")) {
-                    System.out.println(blackList + " also the pref for appname is: " + customPrefs.getCheckedPref(appName.toString()));
+//                    System.out.println(blackList + " also the pref for appname is: " + customPrefs.getCheckedPref(appName.toString()));
                 }
                 if (!appName.equals("Kimojo") && appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && blackList.contains(appName) && customPrefs.getCheckedPref(appName.toString())) {
                     System.out.println("LOOK HERE"+ appName);
@@ -297,7 +301,9 @@ public class MainActivity extends AppCompatActivity {
 //STATIC?
         try {
             TimerInterface Fragment = (TimerInterface) adapter.getCurrentFragment();
-            Fragment.updateTimeTextView();
+            if (Fragment != null) {
+                Fragment.updateTimeTextView();
+            }
         } catch (ClassCastException cce) {
             System.out.println("Wrong stufff");
         }
@@ -328,15 +334,16 @@ public class MainActivity extends AppCompatActivity {
 
 //    STATIC??
     public void handleStartButton(String type) {
-        if (type.equals("timer")&& !timerCreated && !timeLeft.isZero() && !isAlarmMode) {
+        if (type.equals("timer")&& !timerCreated && !timeLeft.isZero() && !timerIsRunning) {
+            isAlarmMode = false;
             createTimer(timeLeft.totalTimeInMs());
             timer.start();
             timerCreated = true;
         }
-        else if (type.equals("alarm")&& !timerCreated && !alarmTimeLeft.isZero()) {
+        else if (type.equals("alarm")&& !timerCreated && !alarmTimeLeft.isZero() && !timerIsRunning) {
+            isAlarmMode = true;
             createTimer(alarmTimeLeft.totalTimeInMs());
             Toast.makeText(this, "Starting Alarm", Toast.LENGTH_LONG).show();
-            isAlarmMode = true;
             timer.start();
             timerCreated = true;
             resetFragmentButtons();
@@ -355,6 +362,7 @@ public class MainActivity extends AppCompatActivity {
 //            alarmTimeLeft.reset();
 //        }
         resetFragmentButtons();
+        cancelNotification(getApplicationContext(), 001);
     }
 
     private void resetFragmentButtons() {
@@ -404,7 +412,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
 //        check if the timer is already running here
         super.onDestroy();
-        if (!timeLeft.isZero() && timerIsRunning){
+        unregisterReceiver(alarmReceiver);
+        if (closeAppBroadcastReceiver != null) {
+            unregisterReceiver(closeAppBroadcastReceiver);
+            System.out.println("unregistered receiver");
+        }
+        cancelNotification(getApplicationContext(), 001);
+
+//        if (!timeLeft.isZero() && timerIsRunning){
             new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setTitle("Are you sure?")
@@ -419,16 +434,12 @@ public class MainActivity extends AppCompatActivity {
                     })
                     .setPositiveButton("No", null)
                     .show();
-        }
-        else{
-            finish();
-            System.exit(0);
-        }
-        unregisterReceiver(alarmReceiver);
-        if (closeAppBroadcastReceiver != null) {
-            unregisterReceiver(closeAppBroadcastReceiver);
-            System.out.println("unregistered receiver");
-        }
+//        }
+//        else{
+//            finish();
+//            System.exit(0);
+//        }
+
         //else if the timer is not running yet, do not reset the timer
 
     }
@@ -436,18 +447,20 @@ public class MainActivity extends AppCompatActivity {
     public void scheduleAlarm() {
 
         Intent startingIntent = new Intent(this, AlarmReceiver.class);
-        startingIntent.putExtra("requestcode",1);
+        startingIntent.putExtra("requestcode", 1);
         Intent endingIntent= new Intent(this, AlarmReceiver.class);
-        endingIntent.putExtra("requestcode",2);
+        endingIntent.putExtra("requestcode", 2);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         //start alarm stuff
         start = PendingIntent.getBroadcast(this,1,  startingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        setCalendarsHourMinToTimes();
         final Calendar rightNow = Calendar.getInstance();
-        if (startingCalendar.getTimeInMillis() < rightNow.getTimeInMillis()) {
+        if (startingCalendar.get(Calendar.HOUR_OF_DAY) < rightNow.get(Calendar.HOUR_OF_DAY) || startingCalendar.get(Calendar.MINUTE) < rightNow.get(Calendar.MINUTE)) {
             startingCalendar.add(Calendar.DATE, 1);
             endingCalendar.add(Calendar.DATE, 1);
         }
+        setCalendarsHourMinToTimes();
 
         long startTime = Time.minutesToMs(Time.msToMinutes(startingCalendar.getTimeInMillis()));
         long endTime = Time.minutesToMs(Time.msToMinutes(endingCalendar.getTimeInMillis()));
@@ -463,12 +476,64 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void setCalendarsHourMinToTimes() {
+        startingCalendar.set(Calendar.HOUR_OF_DAY, startingTime.getHour());
+        startingCalendar.set(Calendar.MINUTE, startingTime.getMinute());
+        endingCalendar.set(Calendar.HOUR_OF_DAY, endingTime.getHour());
+        endingCalendar.set(Calendar.MINUTE, endingTime.getMinute());
+    }
+
     public void handleCancelAlarm() {
         if (start != null && end != null) {
             alarmManager.cancel(start);
             alarmManager.cancel(end);
         }
         resetFragmentButtons();
+    }
+
+
+
+    // Create notification for timer
+    private void createTimerStartedNotification() {
+        String time;
+        if (isAlarmMode) {
+            time = alarmTimeLeft.toString();
+        } else {
+            time = timeLeft.toString();
+        }
+            int icon;
+            if (Build.VERSION.SDK_INT < 20) {
+                icon = R.mipmap.ic_launcher;
+            } else {
+                icon = R.drawable.ic_av_timer_24dp;
+            }
+            Intent openMainActivity = new Intent(this, MainActivity.class);
+            openMainActivity.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+            PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, openMainActivity, PendingIntent.FLAG_UPDATE_CURRENT);
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                        .setSmallIcon(icon)
+                        .setContentTitle("Timer started")
+                        .setContentText("Timer set for " + time)
+                        .setAutoCancel(true)
+//                    .setOngoing(true)
+                    .addAction(0, "Check time", resultPendingIntent)
+                        .addAction(0, "Give up", PendingIntent.getBroadcast(this, 5, new Intent("finish_activity"), PendingIntent.FLAG_UPDATE_CURRENT))
+                        .setDefaults(Notification.DEFAULT_ALL);
+//            mBuilder.setContentIntent(resultPendingIntent);
+
+            Notification notif = mBuilder.build();
+            notif.flags = Notification.FLAG_ONGOING_EVENT;
+
+            int mNotificationId = 001;
+            NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            mNotifyMgr.notify(mNotificationId, mBuilder.build());
+//        }
+    }
+
+    public static void cancelNotification(Context ctx, int notifyId) {
+        NotificationManager nMgr = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+        nMgr.cancel(notifyId);
+        nMgr.cancelAll();
     }
 
     public void silenceNotifications(boolean isChecked) {

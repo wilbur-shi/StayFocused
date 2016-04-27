@@ -2,6 +2,8 @@ package com.mdb.wyn.stayfocused;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.github.lzyzsd.circleprogress.ArcProgress;
 
 /**
  * Created by Wilbur on 4/6/2016.
@@ -19,8 +23,8 @@ public class TimerFragment extends Fragment implements TimerInterface {
     private TextView giveUpButton;
     private MainActivity activity;
 
-    public static void newInstance(/* TODO: some other arguments */) {
-    }
+    public static ArcProgress progressBar;
+    public static int mProgressStatus = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,6 +37,8 @@ public class TimerFragment extends Fragment implements TimerInterface {
         setStartButton();
         setTimeSetTextView();
         resetButtons();
+
+        progressBar= (ArcProgress) view.findViewById(R.id.arc_progress);
 
         return view;
     }
@@ -52,7 +58,13 @@ public class TimerFragment extends Fragment implements TimerInterface {
         giveUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(activity, R.style.MyAlertDialogStyle)
+                int style;
+                if (Build.VERSION.SDK_INT > 20) {
+                    style = R.style.MyAlertDialogStyle;
+                } else {
+                    style = 0;
+                }
+                new AlertDialog.Builder(activity, style)
                         .setIcon(R.drawable.ic_block_24dp)
                         .setTitle("RESET ALL VALUES")
                         .setMessage("Are you sure you want to give up?")
@@ -74,9 +86,13 @@ public class TimerFragment extends Fragment implements TimerInterface {
             @Override
             public void onClick(View v) {
                 if (!activity.timeLeft.isZero()) {
+                    //TODO
+                    activity.savedTimeLeftSec=activity.timeLeft.totalTimeInSec();
+                    activity.timeLeftSec=activity.timeLeft.totalTimeInSec();
                     activity.handleStartButton("timer");
                     giveUpButton.setVisibility(TextView.VISIBLE);
                     startButton.setVisibility(TextView.GONE);
+                    progressBar.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -86,6 +102,11 @@ public class TimerFragment extends Fragment implements TimerInterface {
     public void resetButtons() {
         giveUpButton.setVisibility(View.GONE);
         startButton.setVisibility(View.VISIBLE);
+        try{
+            progressBar.setVisibility(View.GONE);
+            mProgressStatus=0;
+            progressBar.setProgress(0);}
+        catch (NullPointerException n){}
         updateTimeTextView();
     }
 

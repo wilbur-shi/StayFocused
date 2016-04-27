@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    xmlns:custom="http://schemas.android.com/apk/res-auto">
 
     <!--<TextView-->
         <!--android:layout_width="wrap_content"-->
@@ -31,12 +34,26 @@
         <!--android:layout_marginLeft="15dp"-->
         <!--android:textSize="20sp"-->
         <!--android:text="@string/secondDisplay"/>-->
+    <com.github.lzyzsd.circleprogress.ArcProgress
+        android:id="@+id/arc_progress"
+        android:background="#FFFFFF"
+        android:layout_below="@+id/timeSetTextView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        custom:arc_progress="0"
+        custom:arc_text_color="@color/colorPrimaryDark"
+        custom:arc_finished_color="@color/colorPrimary"
+        custom:arc_unfinished_color="@color/colorAccent"
+        android:visibility="gone"
+        />
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="50sp"
+        android:textSize="65sp"
         android:id="@+id/timeSetTextView"
         android:textColor="#000000"
         android:layout_below="@id/minute"
@@ -45,16 +62,16 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <ProgressBar
-        android:layout_width="250dp"
-        android:layout_height="273dp"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:id="@+id/countdownTimerCircle"
-        android:layout_centerInParent="true"
-        android:max="48"
-        android:progress="45"
-        android:progressDrawable="@drawable/countdown_animation"
-        />
+    <!--<ProgressBar-->
+        <!--android:layout_width="250dp"-->
+        <!--android:layout_height="273dp"-->
+        <!--style="?android:attr/progressBarStyleHorizontal"-->
+        <!--android:id="@+id/countdownTimerCircle"-->
+        <!--android:max="48"-->
+        <!--android:progress="45"-->
+        <!--android:progressDrawable="@drawable/countdown_animation"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_centerHorizontal="true" />-->
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -63,8 +80,8 @@
         android:text="@string/giveUpButton"
         android:textSize="27sp"
         android:textColor="#F00"
-        android:layout_alignBottom="@+id/countdownTimerCircle"
-        android:layout_marginTop="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="35dp"
         android:visibility="gone"
         style="?android:attr/borderlessButtonStyle"
         android:layout_centerHorizontal="true" />
@@ -76,9 +93,9 @@
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:textColor="#000000"
-        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
         android:layout_marginBottom="35dp"
-        android:textSize="25sp"
+        android:textSize="45sp"
         style="?android:attr/borderlessButtonStyle"
         android:id="@+id/startButton"/>
 
