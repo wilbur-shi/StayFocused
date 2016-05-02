@@ -177,6 +177,10 @@ public class MainActivity extends AppCompatActivity {
             int hours = endingTime.getHour() - startingTime.getHour();
             int min = endingTime.getMinute() - startingTime.getMinute();
 
+        if (hours < 0) {
+//            endingCalendar.add(Calendar.DATE, 1);
+            hours = endingTime.getHour() + 24 - startingTime.getHour();
+        }
             if (min<0){
                 hours= hours-1;
                 min=min+60;
@@ -184,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("Hours " + hours);
             System.out.println("Minutes " + min);
 
-            if (hours<0 || (hours==0 && min<=0)){
+            if ((hours==0 && min<=0)){
                 alarmTimeLeft= new Time(0,0,0,"timer");
             } else {
                 alarmTimeLeft= new Time(hours,min,0,"timer");
@@ -460,7 +464,10 @@ public class MainActivity extends AppCompatActivity {
             startingCalendar.add(Calendar.DATE, 1);
             endingCalendar.add(Calendar.DATE, 1);
         }
-        setCalendarsHourMinToTimes();
+        if (endingCalendar.get(Calendar.HOUR_OF_DAY) < startingCalendar.get(Calendar.HOUR_OF_DAY)) {
+            endingCalendar.add(Calendar.DATE, 1);
+        }
+//        setCalendarsHourMinToTimes();
 
         long startTime = Time.minutesToMs(Time.msToMinutes(startingCalendar.getTimeInMillis()));
         long endTime = Time.minutesToMs(Time.msToMinutes(endingCalendar.getTimeInMillis()));
@@ -477,6 +484,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setCalendarsHourMinToTimes() {
+        startingCalendar.setTime(Calendar.getInstance().getTime());
+        endingCalendar.setTime(Calendar.getInstance().getTime());
         startingCalendar.set(Calendar.HOUR_OF_DAY, startingTime.getHour());
         startingCalendar.set(Calendar.MINUTE, startingTime.getMinute());
         endingCalendar.set(Calendar.HOUR_OF_DAY, endingTime.getHour());
@@ -497,6 +506,7 @@ public class MainActivity extends AppCompatActivity {
     private void createTimerStartedNotification() {
         String time;
         if (isAlarmMode) {
+            calculateAlarmTimeLeft();
             time = alarmTimeLeft.toString();
         } else {
             time = timeLeft.toString();
