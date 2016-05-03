@@ -55,7 +55,7 @@ public class SettingsFragment extends Fragment {
         blacklistItems = new ArrayList<>();
 
         mBlackListAdapter = new BlackListAdapter(activity, blacklistItems);
-        setBlackListItems(MainActivity.customPrefs.getSet(CustomSharedPreferences.BLACKLIST_KEY));
+        setBlackListItems(MainActivity.customPrefs.getSet(CustomSharedPreferences.BLACKLIST_KEY), MainActivity.customPrefs.getSet(CustomSharedPreferences.PACKAGENAMES_KEY));
         recyclerView.setAdapter(mBlackListAdapter);
 
 //        ArrayList<AppListItem> stuff = new ArrayList<>();
@@ -79,23 +79,29 @@ public class SettingsFragment extends Fragment {
         return view;
     }
 
-    public void setBlackListItems(Set<String> list) {
+    public void setBlackListItems(Set<String> blacklist, Set<String> packageNameList) {
 //        System.out.println("got to setblacklistitems");
-        ArrayList<AppListItem> blacklistArray = new ArrayList<>();
-        if (list != null && !list.isEmpty()) {
+        ArrayList<AppListItem> appListItems = new ArrayList<>();
+        if (blacklist != null && !blacklist.isEmpty()) {
             youHaveNoBlackListWarningTextView.setVisibility(View.GONE);
-            for (String appName : list) {
-                blacklistArray.add(new AppListItem(appName, true, null));
+            Object[] blacklistArray = blacklist.toArray();
+            Object[] packageNameArray = packageNameList.toArray();
+
+            for (int i = 0; i < blacklist.size(); i++) {
+                appListItems.add(new AppListItem(blacklistArray[i].toString(), packageNameArray[i].toString(), true, null));
             }
+//            for (String appName : list) {
+//                blacklistArray.add(new AppListItem(appName, appName, true, null));
+//            }
         } else {
             youHaveNoBlackListWarningTextView.setVisibility(View.VISIBLE);
         }
-        mBlackListAdapter.setBlackListArray(blacklistArray);
+        mBlackListAdapter.setBlackListArray(appListItems);
     }
 
-    public void changeData(Set<String> list) {
+    public void changeData(Set<String> blacklist, Set<String> packageNameList) {
 //        System.out.println("got to chahgedata");
-        setBlackListItems(list);
+        setBlackListItems(blacklist, packageNameList);
         mBlackListAdapter.notifyDataSetChanged();
     }
 }

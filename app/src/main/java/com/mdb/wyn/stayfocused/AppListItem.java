@@ -7,10 +7,12 @@ import android.graphics.drawable.Drawable;
  */
 public class AppListItem {
     public String appName;
+    public String packageName;
     public Boolean isBlacklisted;
     Drawable icon;
-    public AppListItem(String appName, Boolean isBlacklisted, Drawable icon) {
+    public AppListItem(String appName, String packageName, Boolean isBlacklisted, Drawable icon) {
         this.appName= appName;
+        this.packageName = packageName;
         this.isBlacklisted= isBlacklisted;
         this.icon = icon;
     }

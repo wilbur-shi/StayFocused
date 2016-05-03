@@ -118,6 +118,7 @@ MERGED from [com.android.support:support-v4:23.2.0] C:\Users\Wilbur\AndroidStudi
 MERGED from [com.android.support:recyclerview-v7:23.2.0] C:\Users\Wilbur\AndroidStudioProjects\StayFocused\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.2.0\AndroidManifest.xml:20:5-43
 MERGED from [com.android.support:support-v4:23.2.0] C:\Users\Wilbur\AndroidStudioProjects\StayFocused\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.0\AndroidManifest.xml:20:5-43
 MERGED from [com.github.lzyzsd:circleprogress:1.1.0] C:\Users\Wilbur\AndroidStudioProjects\StayFocused\app\build\intermediates\exploded-aar\com.github.lzyzsd\circleprogress\1.1.0\AndroidManifest.xml:7:5-9:41
+MERGED from [com.jaredrummler:android-processes:1.0.8] C:\Users\Wilbur\AndroidStudioProjects\StayFocused\app\build\intermediates\exploded-aar\com.jaredrummler\android-processes\1.0.8\AndroidManifest.xml:6:5-8:41
 	android:targetSdkVersion
 		INJECTED from C:\Users\Wilbur\AndroidStudioProjects\StayFocused\app\src\main\AndroidManifest.xml
 		INJECTED from C:\Users\Wilbur\AndroidStudioProjects\StayFocused\app\src\main\AndroidManifest.xml

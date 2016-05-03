@@ -32,6 +32,13 @@ import android.view.LayoutInflater;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jaredrummler.android.processes.AndroidProcesses;
+import com.jaredrummler.android.processes.models.AndroidAppProcess;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -52,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     public static boolean isAlarmMode = false;
     public static boolean isBlockingOpen = false;
     public boolean timerIsRunning = false;
+    public boolean scheduledAlarm;
     private Context context;
     private ActivityManager activityManager;
 
@@ -65,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<AppListItem> nonSystemAppList;
     public static ArrayList<AppListItem> systemAppList;
     public static Set<String> blackList;
+    public static Set<String> packageNameBlacklist;
 //    public boolean timerIsRunning = false;
     public static CustomSharedPreferences customPrefs;
     BroadcastReceiver closeAppBroadcastReceiver;
@@ -84,6 +93,11 @@ public class MainActivity extends AppCompatActivity {
 
         setupTimes();
         setupTabs();
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        customPrefs = new CustomSharedPreferences(prefs);
+
+        createAppList();
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         adapter = new MyPagerAdapter
@@ -125,10 +139,6 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(closeAppBroadcastReceiver, new IntentFilter("finish_activity"));
         registerReceiver(alarmReceiver, new IntentFilter("start_alarm"));
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        customPrefs = new CustomSharedPreferences(prefs);
-
-        createAppList();
         setCalendarsHourMinToTimes();
 
     }
@@ -196,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
     }
 //STATIC?
     private void createTimer(long ms) {
+        scheduledAlarm = false;
         timerIsRunning = true;
         updateBlackList();
         createTimerStartedNotification();
@@ -246,9 +257,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateBlackList() {
         blackList = customPrefs.getSet(CustomSharedPreferences.BLACKLIST_KEY);
+        packageNameBlacklist = customPrefs.getSet(CustomSharedPreferences.PACKAGENAMEBLACKLIST_KEY);
         try {
             SettingsFragment frag = (SettingsFragment) adapter.getCurrentFragment();
-            frag.changeData(blackList);
+            frag.changeData(blackList, packageNameBlacklist);
         } catch (ClassCastException e){
             System.out.println("weird error not on settings fragment");
         }
@@ -256,21 +268,46 @@ public class MainActivity extends AppCompatActivity {
 
 //    STATIC?
     private void checkForTasks() {
-        final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+        if (Build.VERSION.SDK_INT < 21) {
+            final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+            List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
 
-        PackageManager pm2= context.getPackageManager();
-        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
-            try {
-//                System.out.println("TRY CATCH STATEMENT");
-                CharSequence appName = pm2.getApplicationLabel(pm2.getApplicationInfo(appProcess.processName, PackageManager.GET_META_DATA));
-                if (!appName.equals("Kimojo")) {
-//                    System.out.println(blackList + " also the pref for appname is: " + customPrefs.getCheckedPref(appName.toString()));
+            PackageManager pm2 = context.getPackageManager();
+            for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+                try {
+                    //                System.out.println("TRY CATCH STATEMENT");
+                    CharSequence appName = pm2.getApplicationLabel(pm2.getApplicationInfo(appProcess.processName, PackageManager.GET_META_DATA));
+                    if (!appName.equals("Kimojo")) {
+                        //                    System.out.println(blackList + " also the pref for appname is: " + customPrefs.getCheckedPref(appName.toString()));
+                    }
+                    if (!appName.equals("Kimojo") && appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && blackList.contains(appName) && customPrefs.getCheckedPref(appName.toString())) {
+                        System.out.println("LOOK HERE" + appName);
+
+                        Intent blockingIntent = new Intent(context, BlockingActivity.class);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, blockingIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                        System.out.println("GOT TO PENDINGINTENT");
+                        try {
+                            // Perform the operation associated with our pendingIntent
+                            pendingIntent.send();
+                        } catch (PendingIntent.CanceledException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } catch (PackageManager.NameNotFoundException e) {
+                    System.out.println("Error: " + e);
+
+                } catch (NullPointerException nullPointerException) {
+                    System.out.println("not detecting stuff");
                 }
-                if (!appName.equals("Kimojo") && appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && blackList.contains(appName) && customPrefs.getCheckedPref(appName.toString())) {
-                    System.out.println("LOOK HERE"+ appName);
+            }
+        } else {
+            String foregroundApp = getForegroundApp();
+            if (!foregroundApp.contains("stayfocused")) {
+                System.out.println(foregroundApp + " this is the app and packageblacklist contains? " + packageNameBlacklist.contains(foregroundApp) + " and " + customPrefs.getCheckedPref(foregroundApp));
+                if (packageNameBlacklist.contains(foregroundApp) && customPrefs.getCheckedPref(foregroundApp)) {
+                    System.out.println("LOOK HERE" + foregroundApp);
 
-                    Intent blockingIntent= new Intent(context, BlockingActivity.class);
+                    Intent blockingIntent = new Intent(context, BlockingActivity.class);
                     PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, blockingIntent, PendingIntent.FLAG_CANCEL_CURRENT);
                     System.out.println("GOT TO PENDINGINTENT");
                     try {
@@ -281,16 +318,120 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-
-            catch (PackageManager.NameNotFoundException e){
-                System.out.println("Error: " + e);
-
-            }
-            catch (NullPointerException nullPointerException){
-                System.out.println("not detecting stuff");
-            }
         }
     }
+
+    /** first app user */
+    public static final int AID_APP = 10000;
+
+    /** offset for uid ranges for each user */
+    public static final int AID_USER = 100000;
+
+    public static String getForegroundApp() {
+        File[] files = new File("/proc").listFiles();
+        int lowestOomScore = Integer.MAX_VALUE;
+        String foregroundProcess = "";
+
+        for (File file : files) {
+            if (!file.isDirectory()) {
+                continue;
+            }
+
+            int pid;
+            try {
+                pid = Integer.parseInt(file.getName());
+            } catch (NumberFormatException e) {
+                continue;
+            }
+
+            try {
+                String cgroup = read(String.format("/proc/%d/cgroup", pid));
+
+                String[] lines = cgroup.split("\n");
+
+                if (lines.length != 2) {
+                    continue;
+                }
+
+                String cpuSubsystem = lines[0];
+                String cpuaccctSubsystem = lines[1];
+
+                if (!cpuaccctSubsystem.endsWith(Integer.toString(pid))) {
+                    // not an application process
+                    continue;
+                }
+
+                if (cpuSubsystem.endsWith("bg_non_interactive")) {
+                    // background policy
+                    continue;
+                }
+
+                String cmdline = read(String.format("/proc/%d/cmdline", pid));
+
+                if (cmdline.contains("com.android.systemui")) {
+                    continue;
+                }
+
+                int uid = Integer.parseInt(
+                        cpuaccctSubsystem.split(":")[2].split("/")[1].replace("uid_", ""));
+                if (uid >= 1000 && uid <= 1038) {
+                    // system process
+                    continue;
+                }
+
+                int appId = uid - AID_APP;
+                int userId = 0;
+                // loop until we get the correct user id.
+                // 100000 is the offset for each user.
+                while (appId > AID_USER) {
+                    appId -= AID_USER;
+                    userId++;
+                }
+
+                if (appId < 0) {
+                    continue;
+                }
+
+                // u{user_id}_a{app_id} is used on API 17+ for multiple user account support.
+                // String uidName = String.format("u%d_a%d", userId, appId);
+
+                File oomScoreAdj = new File(String.format("/proc/%d/oom_score_adj", pid));
+                if (oomScoreAdj.canRead()) {
+                    int oomAdj = Integer.parseInt(read(oomScoreAdj.getAbsolutePath()));
+                    if (oomAdj != 0) {
+                        continue;
+                    }
+                }
+
+                int oomscore = Integer.parseInt(read(String.format("/proc/%d/oom_score", pid)));
+                if (oomscore < lowestOomScore) {
+                    lowestOomScore = oomscore;
+                    foregroundProcess = cmdline;
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return foregroundProcess.trim();
+    }
+
+    private static String read(String path) throws IOException {
+        StringBuilder output = new StringBuilder();
+        BufferedReader reader = new BufferedReader(new FileReader(path));
+        output.append(reader.readLine());
+        for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+            output.append('\n').append(line);
+        }
+        reader.close();
+        return output.toString();
+    }
+
+
+
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -384,6 +525,7 @@ public class MainActivity extends AppCompatActivity {
 //        systemAppList = new ArrayList<>();
         HashSet<String> appNames = new HashSet<>();
         HashSet<String> systemApps = new HashSet<>();
+        HashSet<String> packageNames = new HashSet<>();
         PackageManager pm = getApplicationContext().getPackageManager();
         List<PackageInfo> list = pm.getInstalledPackages(0);
         nonSystemAppList = new ArrayList<>();
@@ -391,14 +533,16 @@ public class MainActivity extends AppCompatActivity {
             for (PackageInfo pi : list) {
                 ApplicationInfo ai = pm.getApplicationInfo(pi.packageName, 0);
                 String currAppName = pm.getApplicationLabel(ai).toString();
+//                System.out.println(pi.packageName);
                 Drawable icon = pm.getApplicationIcon(ai);
                 int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
-                if ((ai.flags & mask) == 0 && ! currAppName.equals("Kimojo")) {
+                if (currAppName.equals("Facebook") || ((ai.flags & mask) == 0 && ! currAppName.equals("Kimojo"))) {
 //                    System.out.println(icon==null);
+                    packageNames.add(pi.packageName);
                     appNames.add(currAppName);
-                    nonSystemAppList.add(new AppListItem(currAppName, false, icon));
+                    nonSystemAppList.add(new AppListItem(currAppName, pi.packageName, false, icon));
                 }
-                else if (! currAppName.equals("Kimojo")){
+                else if (!currAppName.equals("Kimojo")){
                     systemApps.add(currAppName);
                 }
 //                System.out.println("YOUNG JUST ADDED"+currAppName);
@@ -406,6 +550,7 @@ public class MainActivity extends AppCompatActivity {
             }
             customPrefs.saveList(CustomSharedPreferences.APPNAMES_KEY, appNames);
             customPrefs.saveList(CustomSharedPreferences.SYSTEMAPPS_KEY, systemApps);
+            customPrefs.saveList(CustomSharedPreferences.PACKAGENAMES_KEY, packageNames);
 //            updateBlackList();
         } catch (PackageManager.NameNotFoundException e) {
             System.out.println("Error: " + e);
@@ -481,6 +626,8 @@ public class MainActivity extends AppCompatActivity {
         alarmManager.set(AlarmManager.RTC_WAKEUP, endTime, end);
         Toast.makeText(this, "Alarm will end at " + endDate, Toast.LENGTH_LONG).show();
 
+        scheduledAlarm = true;
+
     }
 
     private void setCalendarsHourMinToTimes() {
@@ -496,6 +643,7 @@ public class MainActivity extends AppCompatActivity {
         if (start != null && end != null) {
             alarmManager.cancel(start);
             alarmManager.cancel(end);
+            scheduledAlarm = false;
         }
         resetFragmentButtons();
     }

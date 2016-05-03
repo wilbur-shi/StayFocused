@@ -41,14 +41,14 @@ public class AppListActivity extends AppCompatActivity {
 
         prefs = MainActivity.customPrefs;
         Set<String> blacklist = prefs.getSet(CustomSharedPreferences.BLACKLIST_KEY);
-        Set<String> applist = prefs.getSet(CustomSharedPreferences.APPNAMES_KEY);
+//        Set<String> applist = prefs.getSet(CustomSharedPreferences.APPNAMES_KEY);
         for (AppListItem item : MainActivity.nonSystemAppList) {
             boolean isChecked = false;
             if (blacklist != null && blacklist.contains(item.appName)) {
                 isChecked = true;
             }
 //            System.out.println(item.icon==null);
-            appListItems.add(new AppListItem(item.appName, isChecked, item.icon));
+            appListItems.add(new AppListItem(item.appName, item.packageName, isChecked, item.icon));
         }
         appListAdapter = new AppListAdapter(getApplicationContext(), appListItems);
         recyclerView.setAdapter(appListAdapter);
@@ -86,19 +86,6 @@ public class AppListActivity extends AppCompatActivity {
 //        });
     }
 
-    private void setSelectAllCheckBox() {
-        selectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //result of changing the checkbox
-                //dunno if need to notify datasetchanged
-                if (isChecked) {
-                    // TODO: check all the apps
-                }
-            }
-        });
-    }
-
     public void onCheckBoxClicked(View view) {
         //this is for the select all method
         boolean checked = ((CheckBox) view).isChecked();
@@ -114,16 +101,19 @@ public class AppListActivity extends AppCompatActivity {
 //        Set<String> blacklist = prefs.getSet(CustomSharedPreferences.BLACKLIST_KEY);
 //        if (blacklist == null) {
         Set<String> blacklist = new HashSet<>();
+        Set<String> packageBlacklist = new HashSet<>();
 //        }
         for (AppListItem item : appListItems) {
             if (item.isBlacklisted) {
                 blacklist.add(item.appName);
+                packageBlacklist.add(item.packageName);
             } else {
                 prefs.removeFromBlackList(item.appName);
             }
         }
 //        System.out.println("before shared prefs, local blacklist is " + blacklist);
         prefs.saveList(CustomSharedPreferences.BLACKLIST_KEY, blacklist);
+        prefs.saveList(CustomSharedPreferences.PACKAGENAMEBLACKLIST_KEY, packageBlacklist);
 //        System.out.println("after saving, sharedprefs blacklist is " + prefs.getSet(CustomSharedPreferences.BLACKLIST_KEY));
         setResult(RESULT_OK);
         finish();

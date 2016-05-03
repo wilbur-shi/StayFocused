@@ -46,7 +46,7 @@ public class AlarmFragment extends Fragment implements TimerInterface{
         startingTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!activity.timerIsRunning) {
+                if (!activity.timerIsRunning && !activity.scheduledAlarm) {
                     activity.createDialogAndSetTime(1);
 
                 }
@@ -55,7 +55,7 @@ public class AlarmFragment extends Fragment implements TimerInterface{
         endingTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!activity.timerIsRunning) {
+                if (!activity.timerIsRunning && !activity.scheduledAlarm) {
                     activity.createDialogAndSetTime(2);
                 }
             }

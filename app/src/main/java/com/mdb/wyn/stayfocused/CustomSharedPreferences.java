@@ -1,12 +1,8 @@
 package com.mdb.wyn.stayfocused;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -18,8 +14,8 @@ public class CustomSharedPreferences {
     public static final String APPNAMES_KEY = "appnames_key";
     public static final String SYSTEMAPPS_KEY = "systemapps_key";
     public static final String RINGER_KEY = "notifcations_key";
-    private HashMap<String, Boolean> blacklistMap;
-    private HashSet<String> appNames;
+    public static final String PACKAGENAMES_KEY = "packagenames_key";
+    public static final String PACKAGENAMEBLACKLIST_KEY = "packageblacklist_key";
     private SharedPreferences mSharedPrefs;
 
     public CustomSharedPreferences(SharedPreferences prefs) {
@@ -40,9 +36,11 @@ public class CustomSharedPreferences {
         SharedPreferences.Editor editor = mSharedPrefs.edit();
 
         editor.putStringSet(key, list);
-        for (String name : list) {
-            editor.putBoolean(name, true);
+        if (key.equals(BLACKLIST_KEY) || key.equals(PACKAGENAMEBLACKLIST_KEY)) {
+            for (String name : list) {
+                editor.putBoolean(name, true);
 //            System.out.println("put in some true stuff");
+            }
         }
         editor.apply();
     }
@@ -72,7 +70,7 @@ public class CustomSharedPreferences {
     }
 
     public boolean getCheckedPref(String appName) {
-        System.out.println("in getcheckpref, does it contain the appname?" + appName + " " + mSharedPrefs.contains(appName));
+//        System.out.println("in getcheckpref, does it contain the appname?" + appName + " " + mSharedPrefs.contains(appName));
         return mSharedPrefs.getBoolean(appName, false);
     }
 }

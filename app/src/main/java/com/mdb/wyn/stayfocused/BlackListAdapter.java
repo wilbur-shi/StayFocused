@@ -1,6 +1,7 @@
 package com.mdb.wyn.stayfocused;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
@@ -40,7 +41,12 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.Cust
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 appListItem.isBlacklisted = isChecked;
-                MainActivity.customPrefs.changeChecked(appListItem.appName, appListItem.isBlacklisted);
+                if (Build.VERSION.SDK_INT > 21) {
+                    MainActivity.customPrefs.changeChecked(appListItem.packageName, appListItem.isBlacklisted);
+
+                } else {
+                    MainActivity.customPrefs.changeChecked(appListItem.appName, appListItem.isBlacklisted);
+                }
 //                notifyDataSetChanged();
                 //result of changing the checkbox
                 //dunno if need to notify datasetchanged
@@ -56,12 +62,12 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.Cust
     public AppListItem getItem(int position) {
         return blackListArray.get(position);
     }
-
-    public void addAppListItem(AppListItem item) {
-        if (!blackListArray.contains(item)) {
-            blackListArray.add(item);
-        }
-    }
+//
+//    public void addAppListItem(AppListItem item) {
+//        if (!blackListArray.contains(item)) {
+//            blackListArray.add(item);
+//        }
+//    }
 
     public void setBlackListArray(ArrayList<AppListItem> array) {
         blackListArray = array;
